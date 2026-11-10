@@ -1,0 +1,80 @@
+/* ---------- Lilo e Lila: animações ---------- */
+.ch { display: block; width: 100%; height: 100%; overflow: visible; }
+.ch-shadow { fill: rgb(20 16 50 / 0.22); transform-origin: 100px 230px; }
+.ch-leg, .ch-arm, .ch-body, .ch-eye, .ch-rib, .ch-mouth, .ch-all, .ch-pupil { transform-box: view-box; }
+.ch-all { transform-origin: 100px 228px; }
+.ch-rib { transform-origin: 100px 40px; animation: rib 2.6s ease-in-out infinite; }
+.ch-eye { animation: blink 4.2s infinite; }
+.ch-lila .ch-eye { animation-delay: 1.3s; }
+.m { display: none; }
+.m-smile { display: block; }
+
+/* parado: respira e balança de leve */
+.st-idle .ch-body { animation: breathe 2.2s ease-in-out infinite; }
+.st-idle .ch-arm-f { animation: sway 2.2s ease-in-out infinite; }
+.st-idle .ch-arm-b { animation: sway 2.2s ease-in-out infinite reverse; }
+
+/* andando */
+.st-walk .ch-all { animation: bob 0.36s ease-in-out infinite; }
+.st-walk .ch-leg-f { animation: step 0.36s linear infinite; }
+.st-walk .ch-leg-b { animation: step 0.36s linear infinite -0.18s; }
+.st-walk .ch-arm-f { animation: swing 0.36s linear infinite -0.18s; }
+.st-walk .ch-arm-b { animation: swing 0.36s linear infinite; }
+.st-walk .ch-body { transform: rotate(4deg); }
+
+/* pulando */
+.st-jump .ch-leg-f { transform: rotate(38deg); }
+.st-jump .ch-leg-b { transform: rotate(-30deg); }
+.st-jump .ch-arm-f { transform: rotate(118deg); }
+.st-jump .ch-arm-b { transform: rotate(-118deg); }
+.st-jump .ch-body { transform: scale(0.94, 1.07); }
+.st-jump .m-smile, .st-wow .m-smile, .st-oops .m-smile, .st-happy .m-smile { display: none; }
+.st-jump .m-grin, .st-happy .m-grin { display: block; }
+.st-jump .ch-shadow { transform: scale(0.6); opacity: 0.6; }
+
+/* comemorando */
+.st-happy .ch-all { animation: hop 0.5s cubic-bezier(0.3, 0, 0.4, 1) infinite; }
+.st-happy .ch-arm-f { animation: cheer-f 0.5s ease-in-out infinite; }
+.st-happy .ch-arm-b { animation: cheer-b 0.5s ease-in-out infinite; }
+.st-happy .ch-leg-f { animation: kick 0.5s ease-in-out infinite; }
+.st-happy .ch-leg-b { animation: kick 0.5s ease-in-out infinite -0.25s; }
+.st-happy .ch-rib { animation-duration: 0.5s; }
+
+/* surpresa */
+.st-wow .m-wow { display: block; }
+.st-wow .ch-eye { animation: none; transform: scale(1.18); }
+.st-wow .ch-brows { transform: translateY(-6px); }
+.st-wow .ch-arm-f { transform: rotate(120deg); }
+.st-wow .ch-arm-b { transform: rotate(-120deg); }
+.st-wow .ch-all { animation: startle 0.45s ease-out; }
+
+/* ops */
+.st-oops .m-oops { display: block; }
+.st-oops .ch-brow-l { transform: rotate(-16deg); }
+.st-oops .ch-brow-r { transform: rotate(16deg); }
+.st-oops .ch-all { animation: wobble 0.5s ease-in-out; }
+.st-oops .ch-pupil { transform: translate(-3px, 3px); }
+
+/* falando */
+.talk .ch-mouth { animation: talk 0.28s ease-in-out infinite; }
+
+.ch-leg, .ch-arm, .ch-body, .ch-brows, .ch-brow-l, .ch-brow-r, .ch-pupil, .ch-shadow { transition: transform 0.18s ease-out; }
+
+@keyframes blink { 0%, 92%, 100% { transform: scaleY(1); } 95% { transform: scaleY(0.08); } }
+@keyframes rib { 0%, 100% { transform: rotate(-4deg); } 50% { transform: rotate(6deg); } }
+@keyframes breathe { 0%, 100% { transform: scale(1, 1); } 50% { transform: scale(1.015, 0.975); } }
+@keyframes sway { 0%, 100% { transform: rotate(-4deg); } 50% { transform: rotate(6deg); } }
+@keyframes bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
+@keyframes step { 0% { transform: rotate(30deg); } 50% { transform: rotate(-30deg); } 100% { transform: rotate(30deg); } }
+@keyframes swing { 0% { transform: rotate(34deg); } 50% { transform: rotate(-34deg); } 100% { transform: rotate(34deg); } }
+@keyframes hop { 0%, 100% { transform: translateY(0) scale(1.04, 0.95); } 45% { transform: translateY(-26px) scale(0.97, 1.05); } }
+@keyframes cheer-f { 0%, 100% { transform: rotate(100deg); } 50% { transform: rotate(132deg); } }
+@keyframes cheer-b { 0%, 100% { transform: rotate(-100deg); } 50% { transform: rotate(-132deg); } }
+@keyframes kick { 0%, 100% { transform: rotate(0); } 50% { transform: rotate(-28deg); } }
+@keyframes startle { 0% { transform: translateY(0); } 40% { transform: translateY(-16px) scale(0.96, 1.06); } 100% { transform: translateY(0); } }
+@keyframes wobble { 0%, 100% { transform: rotate(0); } 25% { transform: rotate(-5deg); } 75% { transform: rotate(5deg); } }
+@keyframes talk { 0%, 100% { transform: scaleY(1); } 50% { transform: scaleY(0.55); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .ch *, .ch { animation-duration: 0.01s !important; animation-iteration-count: 1 !important; }
+}
