@@ -79,8 +79,8 @@
     world.style.transform = `scale(${scale}) translate(${-cam}px, 0)`;
     back.style.transform = `translate(${cam * 0.35}px, 0)`;
     // coisa mais próxima para interagir
-    let best = null, bd = 120;
-    for (const s of spots) { if (s.off) continue; const d = Math.abs(s.x - lilo.x); if (d < bd) { bd = d; best = s; } }
+    let best = null, bd = 1e9;
+    for (const s of spots) { const d = Math.abs(s.x - lilo.x) - s.w / 2; if (d < 60 && d < bd) { bd = d; best = s; } }
     if (best !== near) { if (near) near.el.classList.remove('near'); near = best; if (near) near.el.classList.add('near'); $('#b-act').classList.toggle('ready', !!near); }
     // dica: depois de um tempo sem progresso, o próximo passo pisca
     if (t - lastProgress > 9000 && !G.busy) { lastProgress = t; const h = G.nextHint && G.nextHint(); if (h) { h.classList.add('hint'); setTimeout(() => h.classList.remove('hint'), 3200); } }
@@ -136,7 +136,7 @@
     s.el = el('button', 'spot spot-' + s.id.split('-')[0] + ' spot-' + s.id, s.art + '<span class="bang">!</span>');
     s.el.type = 'button'; s.el.setAttribute('aria-label', s.label);
     s.el.style.cssText = `left:${s.x - s.w / 2}px;top:${GROUND - s.h + (s.dy || 0)}px;width:${s.w}px;height:${s.h}px`;
-    s.el.onclick = () => { if (G.busy) return; V.audio.play('tap'); walkTo(s.x - (s.stand ?? 30), () => { lilo.dir = 1; act(s); }); };
+    s.el.onclick = () => { if (G.busy) return; V.audio.play('tap'); walkTo(s.x - (s.stand ?? Math.min(150, s.w / 2 + 16)), () => { lilo.dir = 1; act(s); }); };
     things.append(s.el); spots.push(s); return s;
   }
   function addFloat(text, x, y, onTake) {
@@ -146,7 +146,7 @@
     f.el.onclick = () => { if (!G.busy) walkTo(x, () => jump()); };
     things.append(f.el); floats.push(f); return f;
   }
-  function act(s) { if (G.busy || !s || s.off) return; const fn = ACTS[s.id.split('-')[0]]; if (fn) fn(s); }
+  function act(s) { if (G.busy || !s) return; const fn = ACTS[s.id.split('-')[0]]; if (fn) fn(s); }
 
   function build(n) {
     G.level = n; G.mistakes = 0; G.busy = false; G.nextHint = null;
@@ -317,18 +317,18 @@
       if (b.dataset.c !== 'b') return miss(b);
       L3.gem1 = true; progress(); const q = ctx.querySelector('.q'); q.textContent = ''; q.classList.remove('q'); q.style.background = BOOKC.b; q.style.height = '50px';
       ctx.querySelector('.pattern').classList.add('done'); s.el.classList.add('solved'); gem(1); cheer(1400);
-      setTimeout(() => { l3chips(); bubble(lilo, 'Um enigma resolvido!', 2000); }, 1300);
+      setTimeout(() => { if (ctx.querySelector('.pattern')) l3chips(); bubble(lilo, 'Um enigma resolvido!', 2000); }, 1300);
     });
   };
   ACTS.ordem = (s) => {
     if (L3.gem2) return bubble(lila, 'Esta já arrumamos!', 1600);
     bubble(lila, 'Do menor ao maior!', 2400);
     let next = 1;
-    ctx.innerHTML = `<div class="order"><div class="rule" aria-hidden="true">${mini('c', 18)}<b>➜</b>${mini('a', 46)}</div><div class="opts">${shuffle([1, 2, 3, 4]).map((n) => `<button type="button" class="opt" data-n="${n}" aria-label="Livro tamanho ${n}"><i class="mb" style="background:${['#ffc93c', '#7a5ae0', '#ff7a6b', '#1fbfb8'][n - 1]};height:${12 + n * 10}px;width:${20 + n * 9}px"></i></button>`).join('')}</div></div>`;
+    ctx.innerHTML = `<div class="order"><div class="rule" aria-hidden="true">${mini('c', 18)}<b>➜</b>${mini('a', 46)}</div><div class="opts">${shuffle([1, 2, 3, 4]).map((n) => `<button type="button" class="opt" data-n="${n}" aria-label="Livro tamanho ${n}"><i class="mb" style="background:${['#ffc93c', '#7a5ae0', '#ff7a6b', '#1fbfb8'][n - 1]};height:${12 + n * 8}px;width:${16 + n * 10}px"></i></button>`).join('')}</div></div>`;
     ctx.querySelectorAll('.opt').forEach((b) => b.onclick = () => {
       if (+b.dataset.n !== next) return miss(b);
       next++; b.disabled = true; b.classList.add('used'); V.audio.play('pop'); progress();
-      if (next === 5) { L3.gem2 = true; s.el.classList.add('solved'); gem(2); cheer(1400); setTimeout(() => { l3chips(); bubble(lilo, 'Torre arrumada!', 2000); }, 1200); }
+      if (next === 5) { L3.gem2 = true; s.el.classList.add('solved'); gem(2); cheer(1400); setTimeout(() => { if (ctx.querySelector('.order')) l3chips(); bubble(lilo, 'Torre arrumada!', 2000); }, 1200); }
     });
   };
   ACTS.porta = (s) => {
@@ -360,7 +360,9 @@
   async function start() {
     G.stars = []; G.words = []; L1.solving = false;
     $('#start').hidden = true; $('#end').hidden = true; $('#game').classList.remove('ended'); $('#game').classList.add('playing');
-    await goTo(0);
+    // ?fase=2 ou ?fase=3 abre direto naquela fase (para testar)
+    const f = +new URLSearchParams(location.search).get('fase');
+    await goTo(f >= 1 && f <= 3 && !start.used ? f - 1 : 0); start.used = true;
   }
   function run() { if (!G.running) { G.running = true; last = performance.now(); requestAnimationFrame(tick); } }
 
