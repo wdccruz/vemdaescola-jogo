@@ -141,13 +141,13 @@ const Art = (() => {
     ];
     return `<svg viewBox="0 0 1200 350" preserveAspectRatio="xMidYMid slice" focusable="false">
       <defs>
-        <linearGradient id="sky" x1="0%" y1="0%" x2="0%" y2="100%" gradientUnits="objectBoundingBox"><stop stop-color="${sky}"/><stop offset="1" stop-color="${horizon}"/></linearGradient>
-        <radialGradient id="halo"><stop stop-color="${sun}" stop-opacity=".7"/><stop offset="1" stop-color="${sun}" stop-opacity="0"/></radialGradient>
-        <pattern id="grain" width="29" height="31" patternUnits="userSpaceOnUse"><path d="M3 3h1m15 7h1m-6 13h1m11 6h1m-23-13h1" stroke="#fff2d4" opacity=".16"/><path d="M10 5h1m15 14h1m-24 10h1m20-27h1" stroke="#261e40" opacity=".15"/></pattern>
-        <clipPath id="track"><path d="${world === 0 ? 'M0 269H422v30H0Zm758 0H1200v30H758Z' : 'M0 269h1200v30H0Z'}"/></clipPath>
+        <linearGradient id="sky-${world}" x1="0%" y1="0%" x2="0%" y2="100%" gradientUnits="objectBoundingBox"><stop stop-color="${sky}"/><stop offset="1" stop-color="${horizon}"/></linearGradient>
+        <radialGradient id="halo-${world}"><stop stop-color="${sun}" stop-opacity=".7"/><stop offset="1" stop-color="${sun}" stop-opacity="0"/></radialGradient>
+        <pattern id="grain-${world}" width="29" height="31" patternUnits="userSpaceOnUse"><path d="M3 3h1m15 7h1m-6 13h1m11 6h1m-23-13h1" stroke="#fff2d4" opacity=".16"/><path d="M10 5h1m15 14h1m-24 10h1m20-27h1" stroke="#261e40" opacity=".15"/></pattern>
+        <clipPath id="track-${world}"><path d="${world === 0 ? 'M0 269H422v30H0Zm758 0H1200v30H758Z' : 'M0 269h1200v30H0Z'}"/></clipPath>
       </defs>
-      <path fill="url(#sky)" d="M0 0h1200v350H0Z"/>
-      <circle cx="873" cy="99" r="160" fill="url(#halo)"/><circle cx="873" cy="99" r="48" fill="${sun}" opacity=".92"/>
+      <path fill="url(#sky-${world})" d="M0 0h1200v350H0Z"/>
+      <circle cx="873" cy="99" r="160" fill="url(#halo-${world})"/><circle cx="873" cy="99" r="48" fill="${sun}" opacity=".92"/>
       ${stars}
       <path fill="#ffe5c3" opacity=".28" d="M0 103q45-18 103-7 50-15 149 4-52 16-121 9-63 12-131 1Zm663-42q90-19 153-4 66-8 106 0-39 16-103 12-95 7-156-8Zm299 75q83-26 161-8l77-3v22q-128 6-238-11Z"/>
       <path fill="${mountain}" d="M0 181 65 154 100 160 180 85l41 35 33-13 103 63 80-27 82 26L622 98l43 26 45-11 116 68 91-44 58 17 104-75 121 80v110H0Z"/>
@@ -157,10 +157,10 @@ const Art = (() => {
       <path fill="${front}" d="M0 232q111-15 241 4t246-7q120-27 259 4t225-6q108-18 229 3v120H0Z"/>
       <path fill="${dark}" d="M0 277q143 18 274 0 154-17 334 1 152 16 328-1 120-13 264 2v71H0Z"/>
       ${world === 0 ? '<path fill="#578e98" d="M534 224q80 12 143 0l82 126H394Z"/><path fill="#78acaf" d="M564 232q64 10 104-2l51 120H442Z"/><path d="M545 259q42 6 71 0m-103 43q101 13 169-4m-110 27q61 7 98 1m-67-88h34" fill="none" stroke="#d6d9bd" opacity=".6" stroke-width="2"/>' : ''}
-      <g clip-path="url(#track)"><path d="M0 278h1200v11H0Z" fill="#614e64"/><g fill="#b88c79">${ties}</g><path d="M0 278h1200m-1200 8h1200" stroke="#f1c798" stroke-width="2"/></g>
+      <g clip-path="url(#track-${world})"><path d="M0 278h1200v11H0Z" fill="#614e64"/><g fill="#b88c79">${ties}</g><path d="M0 278h1200m-1200 8h1200" stroke="#f1c798" stroke-width="2"/></g>
       ${world === 0 ? bridgeSections : ''}
       ${flora}
-      <path fill="url(#grain)" d="M0 0h1200v350H0Z"/>
+      <path fill="url(#grain-${world})" d="M0 0h1200v350H0Z"/>
       ${!city && forest ? tree(72,347,1.82,'#183b48','#497064')+tree(1166,350,1.75,'#183b48','#497064') : ''}
       ${world > 0 && !finish ? (forest ? forestRewards : cityRewards).slice(0,progress).map(reward => `<g class="reward">${reward}</g>`).join('') : ''}
       ${train(world === 0 ? 414 + progress*112 : 491 + progress*87, 160, 1, happy, true)}
@@ -170,6 +170,3 @@ const Art = (() => {
 
   return { icon, scene };
 })();
-
-
-

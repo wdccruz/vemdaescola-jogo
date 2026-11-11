@@ -9,7 +9,8 @@ const stations = [
       {kind:'word', title:'O amigo da margem', image:'frog', name:'Sapo', pieces:['PA','PO','SO','SA'], answer:[3,1], hint:'Pingo ouviu um coaxo: SA… PO!', win:'SA + PO virou SAPO. Tem mais um arco sobre o rio!'},
       {kind:'word', title:'Uma luz para Brasa', image:'lantern', name:'Lampião', pieces:['PI','LIM','ÃO','LAM','PA'], answer:[3,0,2], hint:'A luz vem de um LAM-PI-ÃO. Comece com LAM.', win:'LAM + PI + ÃO virou LAMPIÃO. A ponte está pronta!'}
     ]
-  }
+  },
+  ...chapters
 ];
 
 const $ = id => document.getElementById(id);
@@ -19,7 +20,7 @@ const ui = Object.fromEntries([
   'ending-title','stamps','restart','route','sound','sound-icon','sound-label'
 ].map(id => [id, $(id)]));
 
-const state = { station:0, step:0, selections:[], complete:false, sound:false };
+const state = { station:0, step:0, selections:[], dials:[0,0], complete:false, sound:false };
 const station = () => stations[state.station];
 const challenge = () => station().challenges[state.step];
 let audio;
@@ -86,14 +87,86 @@ function renderWord(c) {
     <div class="pieces" role="group" aria-label="Sílabas para encaixar">${tiles}</div></div></div>`;
 }
 
-function renderBoard(focusPiece = false) {
-  ui.board.innerHTML = renderWord(challenge());
-  if (focusPiece) ui.board.querySelector('[data-piece]:enabled')?.focus({preventScroll:true});
+const iconTile = ([image, label], attrs, extra = '') =>
+  `<button type="button" class="tile icon-tile ${extra}" ${attrs}>${Art.icon(image)}<span>${label}</span></button>`;
+
+function renderStory(c) {
+  const slots = c.answer.map((_, index) => {
+    const scene = c.scenes[state.selections[index]];
+    return `<button type="button" class="slot${scene ? ' filled' : ''}" data-remove="${index}"
+      aria-label="${scene ? 'Retirar '+scene[1] : 'Cena '+(index+1)}" ${!scene || state.complete ? 'disabled' : ''}>
+      ${scene ? Art.icon(scene[0]) : index+1}</button>`;
+  }).join('');
+  const scenes = c.scenes.map(([image, label], index) => {
+    const placed = state.selections.includes(index);
+    return `<button type="button" class="tile story-tile${placed ? ' is-placed' : ''}"
+      data-piece="${index}" ${placed || state.complete ? 'disabled' : ''}>${Art.icon(image)}<span>${label}</span></button>`;
+  }).join('');
+  return `<div class="manipulatives"><div class="timeline" role="group" aria-label="Linha do tempo">
+    <span class="timeline-label">Começo</span>${slots}<span class="timeline-label">Fim</span></div>
+    <div class="pieces" role="group" aria-label="Cenas para ordenar">${scenes}</div></div>`;
+}
+
+function renderPattern(c) {
+  let gap = 0;
+  const cells = c.pattern.map((icon, index) => {
+    if (icon) return `<span class="pattern-cell" role="img" aria-label="${c.pieces.find(piece => piece[0] === icon)[1]}">${Art.icon(icon)}</span>`;
+    const position = gap++;
+    const piece = c.pieces[state.selections[position]];
+    return `<button type="button" class="slot${piece ? ' filled' : ''}" data-remove="${position}"
+      aria-label="${piece ? 'Retirar '+piece[1] : 'Espaço vazio na posição '+(index+1)}"
+      ${!piece || state.complete ? 'disabled' : ''}>${piece ? Art.icon(piece[0]) : '?'}</button>`;
+  }).join('');
+  return `<div class="manipulatives"><div class="patterns window-pattern" role="group" aria-label="Padrão das janelas">${cells}</div>
+    <div class="pieces" role="group" aria-label="Peças para encaixar">${renderObjects(c)}</div></div>`;
+}
+
+function renderObjects(c) {
+  return c.pieces.map((piece, index) => iconTile(piece, `data-piece="${index}" ${state.complete || state.selections.includes(index) ? 'disabled' : ''}`)).join('');
+}
+
+function renderCombine(c) {
+  const slots = c.answer.map((_, index) => {
+    const piece = c.pieces[state.selections[index]];
+    return `<button type="button" class="slot${piece ? ' filled' : ''}" data-remove="${index}"
+      aria-label="${piece ? 'Retirar '+piece[1] : 'Peça '+(index+1)}" ${!piece || state.complete ? 'disabled' : ''}>${piece ? Art.icon(piece[0]) : '?'}</button>`;
+  }).join('<span class="plus" aria-hidden="true">+</span>');
+  return `<div class="manipulatives"><div class="patterns" role="group" aria-label="Receita do lampião">
+    ${slots}<span class="plus" aria-hidden="true">=</span>
+    <span class="pattern-cell${state.complete ? ' filled' : ' empty'}" role="img" aria-label="Lampião${state.complete ? ' montado' : ' por montar'}">${Art.icon('lantern')}</span></div>
+    <div class="pieces" role="group" aria-label="Objetos da oficina">${renderObjects(c)}</div></div>`;
+}
+
+function renderDial(c) {
+  if (state.complete) return `<div class="treasure"><span class="illustration">${Art.icon('gear')}</span><strong>Engrenagem recuperada!</strong></div>`;
+  const seal = c.answer.map(index => {
+    const [image, label] = c.pieces[index];
+    return `<span class="pattern-cell" role="img" aria-label="${label}">${Art.icon(image)}</span>`;
+  }).join('');
+  const dials = state.dials.map((index, position) => {
+    const piece = c.pieces[index];
+    const label = `Girar roda da ${position ? 'direita' : 'esquerda'}. Agora: ${piece[1]}`;
+    return iconTile(piece, `data-dial="${position}" aria-label="${label}"`, 'dial-tile');
+  }).join('');
+  return `<div class="dial-board">
+    <div><p class="timeline-label">Selo do cofre</p><div class="patterns" role="group" aria-label="Selo do cofre">${seal}</div></div>
+    <div><p class="timeline-label">Suas rodas</p><div class="pieces" role="group" aria-label="Rodas do cofre">${dials}</div></div>
+    <button class="tile open-lock" type="button" data-open>${Art.icon('key')} Abrir cofre</button>
+  </div>`;
+}
+
+const renderers = { word:renderWord, story:renderStory, pattern:renderPattern, combine:renderCombine, dial:renderDial };
+
+function renderBoard(focus = '') {
+  const c = challenge();
+  ui.board.innerHTML = renderers[c.kind](c);
+  if (focus) ui.board.querySelector(focus)?.focus({preventScroll:true});
 }
 
 function openChallenge(newStation) {
   const c = challenge();
   state.selections = [];
+  state.dials = [0,0];
   state.complete = false;
   ui.adventure.style.setProperty('--accent', station().accent);
   ui.adventure.style.setProperty('--soft', station().soft);
@@ -101,7 +174,7 @@ function openChallenge(newStation) {
   ui['station-title'].textContent = station().title;
   ui['step-label'].textContent = `${state.step+1} de ${station().challenges.length} desafios`;
   ui['challenge-title'].textContent = c.title;
-  ui.instructions.textContent = 'Toque nas sílabas, na ordem, para montar a palavra da figura.';
+  ui.instructions.textContent = c.instructions ?? 'Toque nas sílabas, na ordem, para montar a palavra da figura.';
   ui['hint-art'].innerHTML = Art.icon(station().companion);
   ui.hint.setAttribute('aria-label', 'Pedir dica a '+(station().companion === 'pingo' ? 'Pingo' : 'Lume'));
   ui.hint.disabled = false;
@@ -147,11 +220,19 @@ function wrong(tile, message) {
   play([330,294]);
 }
 
-function chooseWord(index, tile) {
+const tryAgain = {
+  word: ['Essa sílaba não abre a palavra. Experimente outra!', 'Essa sílaba não encaixou aqui. Tente outra!'],
+  story: ['O que aconteceu primeiro? Veja as outras cenas.', 'Essa cena acontece em outro momento. O que vem agora?'],
+  pattern: ['Compare com o primeiro trio de janelas.', 'Ainda falta uma peça. Veja como termina o primeiro trio!'],
+  combine: ['Essa peça fica para outra invenção. Procure uma da receita.', 'A receita ainda precisa de outra peça.']
+};
+
+function choosePiece(index, tile) {
   const c = challenge();
   const next = state.selections.length;
-  if (c.answer[next] !== index) {
-    wrong(tile, next ? 'Essa sílaba não encaixou aqui. Tente outra!' : 'Essa sílaba não abre a palavra. Experimente outra!');
+  const fits = c.kind === 'combine' ? c.answer.includes(index) : c.answer[next] === index;
+  if (!fits) {
+    wrong(tile, tryAgain[c.kind][Number(next > 0)]);
     return;
   }
   state.selections.push(index);
@@ -159,8 +240,8 @@ function chooseWord(index, tile) {
     complete();
     return;
   }
-  renderBoard(true);
-  feedback(c.pieces[index]+' encaixou! Qual vem agora?', true);
+  renderBoard('[data-piece]:enabled');
+  feedback(c.kind === 'word' ? c.pieces[index]+' encaixou! Qual vem agora?' : 'Encaixou! Qual é a próxima peça?', true);
   play([587]);
 }
 
@@ -179,11 +260,20 @@ ui.board.addEventListener('click', event => {
   const tile = event.target.closest('button');
   if (!tile || state.complete) return;
   if (tile.dataset.remove !== undefined) {
-    state.selections.splice(Number(tile.dataset.remove));
-    renderBoard(true);
-    feedback('Agora você pode encaixar a peça de novo.');
+    const position = Number(tile.dataset.remove);
+    const [removed] = state.selections.splice(position, challenge().kind === 'combine' ? 1 : Infinity);
+    renderBoard(`[data-piece="${removed}"]`);
+    feedback('Você pode encaixar a peça de novo.');
   } else if (tile.dataset.piece !== undefined) {
-    chooseWord(Number(tile.dataset.piece), tile);
+    choosePiece(Number(tile.dataset.piece), tile);
+  } else if (tile.dataset.dial !== undefined) {
+    const dial = Number(tile.dataset.dial);
+    state.dials[dial] = (state.dials[dial]+1) % challenge().pieces.length;
+    renderBoard(`[data-dial="${dial}"]`);
+    play([440]);
+  } else if (tile.hasAttribute('data-open')) {
+    if (state.dials.every((value, index) => value === challenge().answer[index])) complete();
+    else wrong(tile, 'Ainda está trancado. Compare as suas rodas com o selo.');
   }
 });
 ui.hint.addEventListener('click', () => { feedback(challenge().hint); play([494,659]); });
