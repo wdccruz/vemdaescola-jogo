@@ -93,6 +93,12 @@ async function village(page,keys) {
   await keys.walk(1054);
   assert.ok((await snapshot(page)).flags.includes('checkpoint'));
   await shot(page,'02-vila');
+  await page.reload();
+  await page.locator('#resume').click();
+  await landed(page,580);
+  const saved=await snapshot(page);
+  assert.ok(Math.abs(saved.x-1035)<2);
+  assert.ok(saved.flags.includes('bridge')&&saved.items.includes('graphite'));
   await keys.walk(1333);
   await wait(page,()=>adventure.world.flags.has('gate'));
   assert.ok((await snapshot(page)).crate>1300);
@@ -102,7 +108,7 @@ async function village(page,keys) {
   assert.match(await page.locator('#line').textContent(),/mancha/);
   await page.locator('#skip').click();
   await wait(page,()=>adventure.world.index===1);
-  console.log('OK Vila: diálogo, falha recuperada, segredo, mochila, grafite, ponte, placa, portão e transição');
+  console.log('OK Vila: diálogo, falha recuperada, segredo, mochila, grafite, ponte, checkpoint após recarga, placa, portão e transição');
 }
 
 async function forest(page,keys) {

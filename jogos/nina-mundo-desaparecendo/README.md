@@ -45,6 +45,10 @@ node testes/jogar.cjs
 
 O primeiro usa somente Node.js. O segundo usa Playwright e Chromium, aciona as teclas e os botões de toque reais e percorre o jogo em subdiretório. É possível informar `NINA_PLAYWRIGHT` para apontar para uma instalação externa, `NINA_CHROMIUM` para escolher o executável, `NINA_CAPTURAS` para gravar screenshots e `NINA_ATE=vila` ou `NINA_ATE=floresta` para encurtar a verificação durante o desenvolvimento.
 
+A execução automatizada percorreu os três capítulos no Chromium, recolheu os três selos, retomou a Vila após recarregar a página e verificou o final, o reinício, o iframe e a abertura direta. Em 390 × 844, o teste de toque emulado combinou pulo e direção e confirmou a reconstrução da ponte. A validação em Android e iPhone físicos continua pendente.
+
+Os arquivos de jogo somam aproximadamente 2,42 MB. A abertura carrega cerca de 0,65 MB e a Vila acrescenta 0,64 MB. As outras duas paisagens são carregadas na entrada de cada capítulo.
+
 ## Arte
 
 Capa e paisagens foram criadas com o gerador de imagens integrado, com as referências anexadas como direção artística. Os WebP finais estão em `assets/`. Os personagens jogáveis, mecanismos e efeitos foram desenhados em Canvas. A Baloo 2 é distribuída sob a licença SIL OFL, também incluída em `assets/`.
