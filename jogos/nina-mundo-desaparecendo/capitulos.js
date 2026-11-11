@@ -28,17 +28,17 @@ const Levels = [
     name:'A Vila de Papel', short:'Vila de Papel', art:'vila', width:2190,height:820, spawn:[91,580], base:580,
     palette:['#274d59','#678e85','#ca8e76','#e4bb86','#3c575e','#21363e'],
     tiles:[
-      tile(0,580,620,145,'ground'),tile(953,580,1237,145,'ground'),
+      tile(0,580,665,145,'ground'),tile(953,580,1237,145,'ground'),
       tile(174,492,156,24,'roof'),tile(41,400,133,23,'roof'),tile(351,495,143,24,'roof'),tile(466,403,130,24,'roof'),
       tile(1020,497,139,22,'roof'),tile(1570,495,130,22,'roof'),tile(1740,431,123,23,'roof'),
-      {...tile(617,578,341,32,'bridge'),id:'bridge',needs:'bridge'}
+      {...tile(662,580,296,32,'bridge'),id:'bridge',needs:'bridge'}
     ],
     solids:[{x:1511,y:332,w:44,h:248,id:'door',until:'gate',style:'gate'}],
     crate:{x:1153,y:526,w:57,h:54}, plate:{x:1350,y:580,w:82},
     items:[pickup('stampV',105,365,'stamp'),pickup('graphite',532,365,'graphite')],
     marks:[
       mark('cora',339,580,'talk','Conversar com Cora'),
-      mark('bridge',592,580,'draw','Desenhar a ponte'),
+      mark('bridge',625,580,'draw','Desenhar a ponte'),
       mark('mechanism',1475,580,'talk','Examinar o portão'),
       mark('exit',2025,580,'exit','Entrar na floresta','gate')
     ],
@@ -62,7 +62,7 @@ const Levels = [
       tile(446,613,152),tile(613,509,167),tile(804,411,134),tile(1016,407,116),
       tile(1184,704,108),lift('firelift',1278,725,111,'y',205,4.6,'firefly'),
       tile(1401,516,176),tile(1588,619,135),tile(1739,674,143),
-      {...tile(786,778,327,28,'bridge'),id:'vine',needs:'vine'}
+      {...tile(786,780,327,28,'bridge'),id:'vine',needs:'vine'}
     ],
     solids:[],
     crate:{x:242,y:726,w:58,h:54},
@@ -96,7 +96,7 @@ const Levels = [
       tile(838,864,235,27,'books'),tile(1093,762,139,24,'books'),tile(930,649,152,24,'books'),
       lift('sealLift',761,637,126,'y',230,4.4,'seal'),
       tile(902,407,227,26,'books'),tile(1311,330,345,31,'books'),
-      {...tile(1118,405,199,24,'bridge'),id:'stair',needs:'stair'}
+      {...tile(1118,407,199,24,'bridge'),id:'stair',needs:'stair'}
     ],
     solids:[
       {x:337,y:885,w:39,h:225,id:'panel',until:'panel',style:'wall'},
@@ -129,4 +129,3 @@ const Levels = [
     ]
   }
 ];
-

@@ -71,13 +71,14 @@ const Physics = (() => {
     if (dir) p.face = dir;
 
     const dx = p.vx*dt;
+    let pushing = false;
     if (crate && crate.on && wasGrounded && sides(p,crate) && dx) {
       const gap = dx > 0 ? crate.x-p.x-p.w : p.x-crate.x-crate.w;
-      if (gap >= -.5 && gap <= Math.abs(dx)+.5) moveX(crate,dx*.82,solids);
+      if (gap >= -.5 && gap <= Math.abs(dx)+.5) pushing = Math.abs(moveX(crate,dx*.78,solids))>.005;
     }
     const colliders = crate ? [...solids,crate] : solids;
     const travelled = moveX(p,dx,colliders);
-    if (Math.abs(travelled-dx) > .01) p.vx = 0;
+    if (!pushing && Math.abs(travelled-dx) > .01) p.vx = 0;
 
     p.vy = Math.min(1020,p.vy+tuning.gravity*dt);
     const impact = p.vy;
