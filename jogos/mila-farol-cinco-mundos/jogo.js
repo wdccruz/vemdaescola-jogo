@@ -30,6 +30,7 @@ class Expedition {
     el.hint.addEventListener('click',()=>this.hint());
     el.map.addEventListener('click',()=>UI.map(this.profile,this.carried()));
     el.recover.addEventListener('click',()=>{el.inventory.close();this.recover();});
+    el.controls.addEventListener('click',()=>this.status());
     this.canvas.addEventListener('click',event=>this.pointAt(event));
     new ResizeObserver(()=>this.resize()).observe(el.stage);
     requestAnimationFrame(t=>this.frame(t));
@@ -43,7 +44,7 @@ class Expedition {
     this.open(this.profile.location);
     if(!resume)UI.speak([
       ['Mila','O mapa da visita escolar mostra cinco ilhas. A luz que ligava todas elas se apagou!'],
-      ['Tuca','Sou Tuca, a capivara do farol. A primeira lente está na Ilha dos Números. Caminhe até o portal dourado e use Agir ou E.']
+      ['Tuca','Sou Tuca! Vamos começar pela Ilha dos Números. Siga a placa “Próxima ilha” e use o botão que aparecer quando estiver perto.']
     ]);
   }
   open(index){
@@ -126,9 +127,38 @@ class Expedition {
     const w=this.world,p=this.puzzle();
     UI.label(el.place,w.level.name);
     UI.label(el.area,w.index<0?'Porto das cinco ilhas':p?.area??'Mirante da lente');
-    UI.label(el.task,w.index<0?(this.profile.lenses.length===5?'Leve as cinco lentes ao mecanismo do farol.':'Caminhe até um portal iluminado e use Agir.'):p?.task??'Suba pelo elevador, salte para o mirante e recolha a lente.');
+    const next=Worlds[this.profile.lenses.length];
+    UI.label(el.task,w.index<0?(next?'Próximo destino: '+next.name+'.':'As cinco lentes foram reunidas.'):p?.task??'A lente está no mirante.');
     const item=this.carried();
     UI.display(el.carry,item?'Na mão · '+item.label:'');
+    this.guide(p,item,next);
+  }
+  guide(p,item,next){
+    const w=this.world,l=w.level;
+    const act=UI.buttonMode()?'Agir':'E';
+    const undo=UI.buttonMode()?'Devolver':'Q';
+    const jump=UI.buttonMode()?'Pular':'Espaço';
+    let message,marker;
+    if(w.index<0){
+      message=next?'Caminhe até a placa “Próxima ilha”. Junto ao portal, aperte '+act+'.':'Vá ao pé do farol e aperte '+act+' para acender a luz.';
+      marker={x:next?l.portals[this.profile.lenses.length]:l.beacon,y:l.ground-(next?168:299),label:next?'Próxima ilha':'Acender o farol'};
+    }else if(!p){
+      message='Vá à direita. Quando o elevador descer, pule nele. No alto, pule para o mirante e aperte '+act+' junto à lente.';
+    }else if(p.step>0&&w.state.checkpoint<l.checkpoints[p.step-1].x){
+      message=p.step===1?'O portão abriu. Siga à direita até a próxima oficina.':'A ponte está pronta. Atravesse para chegar ao próximo mecanismo.';
+    }else if(p.kind==='slots'){
+      if(item)message='Você leva '+item.label+'. Chegue perto de um encaixe e aperte '+act+' de novo.';
+      else if(this.slots(p).every(id=>id!==null))message='Confira a montagem. Perto de um encaixe, aperte '+act+' para retirar a peça.';
+      else if(p.id==='motor-decimal')message='Comece pelas peças no chão. Chegue perto de uma e aperte '+act+' para pegá-la.';
+      else message='Chegue perto de uma peça e aperte '+act+' para pegá-la. Para subir na prateleira, use '+jump+'.';
+      if(p.id==='motor-decimal'){
+        marker=item?{x:536,y:l.ground-169,label:'Encaixes'}:{x:278,y:l.ground-55,label:'Peças'};
+      }
+    }else{
+      message='Chegue perto de um '+(p.kind==='cash'?'guichê':'recipiente')+' e aperte '+act+' para acrescentar uma unidade. '+undo+' retira uma.';
+    }
+    w.waypoint=marker;
+    UI.label(el.guide,message);
   }
   hint(){
     const w=this.world,p=this.puzzle();
@@ -210,6 +240,10 @@ class Expedition {
         if(!w.carry&&old===null){UI.notice('Pegue uma peça da prateleira e traga até aqui.');return;}
         cells[target.index]=w.carry?.id??null;
         w.carry=old===null?null:{step:target.p.step,id:old};
+        if(target.p.id==='motor-decimal'&&cells[target.index]!==null){
+          const value=target.p.objects[cells[target.index]].value;
+          if(value!==target.p.target[target.index])UI.notice('Confira o valor na posição das '+target.label.toLowerCase()+'. Você pode retirar essa peça e tentar outra.');
+        }
         this.check(target.p);
         break;
       }
@@ -310,6 +344,7 @@ class Expedition {
     for(const cp of w.level.checkpoints??[])if(w.state.solved[cp.need]&&w.state.checkpoint<cp.x&&p.on&&Math.abs(p.x+15-cp.x)<57&&Math.abs(p.y+p.h-cp.y)<7){
       w.state.checkpoint=cp.x;w.state.crateX=w.crate?.x;this.save();
       UI.notice('✦ Ponto salvo');UI.sound([523,698]);
+      this.status();
     }
     const s=w.level.secret;
     if(s&&!this.profile.secrets.includes(w.index)&&Math.abs(p.x+15-s.x)<27&&Math.abs(p.y+28-s.y)<35){

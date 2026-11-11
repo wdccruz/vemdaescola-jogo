@@ -7,7 +7,7 @@ const stations={
   numeros:[
     {id:'motor-decimal',title:'O motor das centenas',area:'Oficina do cais',kind:'slots',rule:'exact',target:[200,40,3],
       order:['Centenas','Dezenas','Unidades'],objects:[n(100,'base'),n(40,'base'),n(200,'base'),n(3,'base'),n(7,'base'),n(30,'base')],
-      task:'Leve as peças da oficina aos encaixes para formar 243.',
+      task:'Missão da oficina: monte 243 nos três encaixes do motor.',
       clue:'243 tem centenas, dezenas e unidades. O primeiro encaixe recebe o valor das centenas.',
       help:'Leve 200 às centenas, 40 às dezenas e 3 às unidades.',
       win:'200 + 40 + 3 = 243. O motor abriu o portão da oficina!'},
@@ -128,7 +128,10 @@ function buildWorld(index){
   const y=world.ground;
   const stage=stations[world.id].map((definition,i)=>({
     ...definition,x:sockets[i],y,step:i,
-    objects:definition.objects?.map((value,j)=>({...value,id:j,x:racks[i][j][0],y:y+racks[i][j][1]})),
+    objects:definition.objects?.map((value,j)=>{
+      const [x,offset]=definition.id==='motor-decimal'&&j===3?[377,0]:racks[i][j];
+      return {...value,id:j,x,y:y+offset};
+    }),
     fixtures:definition.order.map((label,j)=>({label,x:sockets[i]+j*(definition.kind==='slots'?71:76),y,index:j}))
   }));
   const upper=index%2?294:270;

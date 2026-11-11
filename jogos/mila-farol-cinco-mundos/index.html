@@ -21,13 +21,14 @@
 <p class="kicker">✦ Uma aventura de matemática</p>
 <h1>Mila <span>e o Farol dos<br><em>Cinco Mundos</em></span></h1>
 <p>Cinco ilhas perderam a luz. Explore, construa e resolva os mecanismos com Mila e Tuca para reacender o farol.</p>
-<div class="actions"><button id="start" class="primary">Abrir o mapa <span aria-hidden="true">→</span></button><button id="resume" class="quiet" hidden>Continuar aventura</button></div>
+<div class="actions"><button id="start" class="primary">Começar aventura <span aria-hidden="true">→</span></button><button id="resume" class="quiet" hidden>Continuar aventura</button></div>
 </div>
 </section>
 <section id="game" class="game" hidden aria-labelledby="place">
 <div class="hud"><div><p class="kicker" id="area"></p><h2 id="place"></h2></div>
 <div class="hud-actions"><button class="quiet" id="hint">Dica do Tuca</button><button class="quiet" id="map">Mapa <span id="lens-count">0/5</span></button></div></div>
 <p id="task" class="task" aria-live="polite"></p>
+<div class="guide"><span aria-hidden="true">✦</span><p id="guide" aria-live="polite"></p></div>
 <div class="stage" id="stage">
 <canvas id="scene" tabindex="0" aria-label="Cenário de plataforma. Use setas ou A e D para andar, Espaço para pular, E para agir e Q para devolver."></canvas>
 <p id="notice" class="notice" role="status" hidden></p>
