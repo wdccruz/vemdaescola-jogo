@@ -150,13 +150,13 @@ function buildWorld(index){
     tile(1408,y-490,32,490,'gate',{until:1}),
     tile(2345,y-490,35,490,'gate',{until:2}),
     tile(1408,y,right-1405,29,'bridge',{need:1}),
-    tile(2390,y-8,106,21,'lift',{need:2,id:'lens-lift',moving:true,range:liftHeight,period:4.4}),
+    tile(2390,y-8,106,21,'lift',{need:2,id:'lens-lift',moving:true,range:liftHeight,period:5.4}),
     ...upperRoutes
   ];
   const secrets=[{x:205,y:y-328},{x:640,y:y-286},{x:613,y:y-302},{x:649,y:y-280},{x:638,y:y-307}];
   return {...world,width:2810,height:y+320,stage,tiles,upper,
     ladder:{x:[150,114,164,141,132][index],y:y-204,h:204},secret:secrets[index],checkpoints:[{x:866,y,need:0},{x:1750,y,need:1}],
-    crate:{x:51,y:y-48,w:52,h:48},lens:{x:2660,y:y-upper},
+    crate:{x:45,y:y-48,w:52,h:48},lens:{x:2660,y:y-upper},
     sections:[{x:0,style:'exterior'},{x:833,style:index===1?'caverna':index===2?'templo':'oficina'},{x:1722,style:'torre'}]};
 }
 

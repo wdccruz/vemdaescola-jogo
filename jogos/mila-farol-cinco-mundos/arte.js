@@ -1,7 +1,7 @@
 'use strict';
 
 const SceneArt=(()=>{
-  const assets=new Map(),paths=new Map();
+  const assets=new Map(),paths=new Map(),terrain=new WeakMap();
   const paper='#ffe8b5',ink='#243743',gold='#ffd68d';
   const rand=i=>{const x=Math.sin(i*127.1+31.7)*43758.54;return x-Math.floor(x);};
   function load(id){
@@ -184,6 +184,21 @@ const SceneArt=(()=>{
       line(g,[[6,-2],[18,-16],[w-18,-16],[w-6,-2]],edge,2.2);
     }
     g.restore();
+  }
+
+  function terrainTile(g,s,level){
+    const margin=22;
+    let bitmap=terrain.get(s);
+    if(!bitmap){
+      bitmap=document.createElement('canvas');
+      bitmap.width=Math.ceil(s.w+margin*2);
+      bitmap.height=Math.ceil(s.h+margin*2+(s.style==='bridge'?40:0));
+      const paint=bitmap.getContext('2d');
+      paint.translate(margin-s.x,margin-s.y);
+      surface(paint,s,level);
+      terrain.set(s,bitmap);
+    }
+    g.drawImage(bitmap,s.x-margin,s.y-margin);
   }
 
   function gear(g,x,y,r,t,color){
@@ -464,7 +479,7 @@ const SceneArt=(()=>{
     scenery(g,w,c,t,reduced);
     g.save();g.translate(-c.x,-c.y);
     decor(g,w,c,t,profile);
-    for(const s of w.solids)if(seen(s.x+s.w/2,s.y,c,s.w/2+s.h+50))surface(g,s,w.level);
+    for(const s of w.solids)if(seen(s.x+s.w/2,s.y,c,s.w/2+s.h+50))terrainTile(g,s,w.level);
     if(w.crate){
       const {x,y,w:width,h}=w.crate;
       rect(g,x,y,width,h,3,'#ad765e','#584553',2);

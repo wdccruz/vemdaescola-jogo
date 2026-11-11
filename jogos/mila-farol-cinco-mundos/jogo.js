@@ -106,7 +106,11 @@ class Expedition {
     const w=this.world;
     w.solids=w.tiles.filter(s=>(s.need===undefined||w.state.solved[s.need])&&(s.until===undefined||!w.state.solved[s.until]));
     for(const s of w.solids)if(s.moving){
-      const amount=s.range*(1-Math.cos(w.time/s.period*Math.PI*2))/2;
+      const phase=(w.time/s.period)%1;
+      const eased=part=>(1-Math.cos(Math.PI*part))/2;
+      const travel=s.axis==='x'?eased(phase*2):
+        phase<.22?0:phase<.5?eased((phase-.22)/.28):phase<.72?1:1-eased((phase-.72)/.28);
+      const amount=s.range*travel;
       const x=s.homeX+(s.axis==='x'?amount:0),y=s.home-(s.axis==='x'?0:amount);
       s.dx=x-s.x;s.dy=y-s.y;s.x=x;s.y=y;
     }
@@ -176,7 +180,8 @@ class Expedition {
     if(t.kind==='object')return act+' · Pegar '+t.label;
     if(t.kind==='slot'){
       const selected=this.slots(t.p)[t.index];
-      return act+' · '+(w.carry?'Encaixar em ':selected!==null?'Retirar de ':'Traga uma peça para ')+t.label;
+      if(!w.carry&&selected===null)return 'Traga uma peça para '+t.label;
+      return act+' · '+(w.carry?'Encaixar em ':'Retirar de ')+t.label;
     }
     if(t.kind==='bin')return act+' · '+(t.p.kind==='cash'?'Pagar com ':'Acrescentar em ')+t.label;
     return act+' · '+t.label;
@@ -294,6 +299,7 @@ class Expedition {
     }
     const ladder=w.level.ladder;
     const onLadder=ladder&&Math.abs(p.x+15-ladder.x)<28&&p.y+p.h>=ladder.y-3&&p.y+p.h<=ladder.y+ladder.h+4;
+    if(w.climbing&&onLadder&&input.dir&&p.y+p.h<=ladder.y+10)p.y=ladder.y-p.h;
     w.climbing=Boolean(onLadder&&(input.climb||w.climbing)&&!input.dir);
     if(w.climbing){
       p.vx=0;p.vy=0;p.on=null;

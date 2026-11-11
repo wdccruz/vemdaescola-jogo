@@ -79,7 +79,11 @@ async function solveBins(page,k,p,plan){
 
 async function lens(page,k,l){
   await k.walk(2364);
-  await wait(page,y=>expedition.world.solids.find(s=>s.id==='lens-lift').y>y-53,l.ground);
+  await nap(page,140);
+  await wait(page,()=>{
+    const w=expedition.world,lift=w.solids.find(s=>s.id==='lens-lift');
+    return (w.time/lift.period)%1<.12;
+  });
   await page.keyboard.down('Space');
   try {
     await k.walk(2433);
