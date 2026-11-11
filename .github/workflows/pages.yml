@@ -30,6 +30,7 @@ jobs:
           cp -r index.html css js fonts site/
           cp -r jogos/trem-das-historias site/jogos/
           cp -r jogos/nina-mundo-desaparecendo site/jogos/
+          cp -r jogos/mila-farol-cinco-mundos site/jogos/
       - uses: actions/upload-pages-artifact@v3
         with:
           path: site

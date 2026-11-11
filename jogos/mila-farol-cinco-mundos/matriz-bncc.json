@@ -1,0 +1,470 @@
+{
+  "titulo": "Mila e o Farol dos Cinco Mundos",
+  "ano": "3º ano do Ensino Fundamental",
+  "fonte": "https://basenacionalcomum.mec.gov.br/images/BNCC_EI_EF_110518_versaofinal_site.pdf#page=289",
+  "nota": "Os códigos e o escopo foram conferidos nas pp. 288–290 da BNCC. Implementada indica que o recorte central foi praticado no jogo. Parcial indica elementos explícitos da habilidade que ainda faltam. Planejada indica ausência de desafio jogável dedicado. A avaliação de aprendizagem depende de validação docente.",
+  "habilidades": [
+    {
+      "codigo": "EF03MA01",
+      "unidade": "Números",
+      "status": "planejada",
+      "recorte": "Ler, escrever e comparar números até a unidade de milhar em algarismos e por extenso."
+    },
+    {
+      "codigo": "EF03MA02",
+      "unidade": "Números",
+      "status": "parcial",
+      "recorte": "Compor 243 com centenas, dezenas e unidades.",
+      "expansao": "Variar a decomposição, incluindo unidade de milhar e ordens vazias."
+    },
+    {
+      "codigo": "EF03MA03",
+      "unidade": "Números",
+      "status": "parcial",
+      "recorte": "Usar a soma de quatro parcelas iguais para montar a ponte.",
+      "expansao": "Ampliar fatos básicos de adição e multiplicação em diferentes registros."
+    },
+    {
+      "codigo": "EF03MA04",
+      "unidade": "Números",
+      "status": "planejada",
+      "recorte": "Relacionar números e deslocamentos em uma reta numérica."
+    },
+    {
+      "codigo": "EF03MA05",
+      "unidade": "Números",
+      "status": "parcial",
+      "recorte": "Somar parcelas ou subtrair para alimentar dois canais com a mesma quantidade.",
+      "expansao": "Propor registros de procedimentos escritos, inclusive convencionais."
+    },
+    {
+      "codigo": "EF03MA06",
+      "unidade": "Números",
+      "status": "planejada",
+      "recorte": "Resolver e elaborar situações de juntar, retirar, comparar e completar."
+    },
+    {
+      "codigo": "EF03MA07",
+      "unidade": "Números",
+      "status": "parcial",
+      "recorte": "Montar quatro trechos iguais com 24 rebites.",
+      "expansao": "Acrescentar arranjos retangulares explícitos e elaboração de problemas."
+    },
+    {
+      "codigo": "EF03MA08",
+      "unidade": "Números",
+      "status": "parcial",
+      "recorte": "Repartir 26 peças entre quatro equipes e separar o resto.",
+      "expansao": "Incluir divisão exata, divisão por medida e elaboração de problemas jogáveis."
+    },
+    {
+      "codigo": "EF03MA09",
+      "unidade": "Números",
+      "status": "planejada",
+      "recorte": "Associar divisões exatas a metade, terça, quarta, quinta e décima partes."
+    },
+    {
+      "codigo": "EF03MA10",
+      "unidade": "Álgebra",
+      "status": "implementada",
+      "recorte": "Inferir passos constantes de +3 e −4 e completar termos internos.",
+      "expansao": "Acrescentar produção da regra pela criança em diferentes registros."
+    },
+    {
+      "codigo": "EF03MA11",
+      "unidade": "Álgebra",
+      "status": "parcial",
+      "recorte": "Comparar expressões de soma e diferença que resultam em 12.",
+      "expansao": "Permitir à criança produzir novas sentenças numéricas."
+    },
+    {
+      "codigo": "EF03MA12",
+      "unidade": "Geometria",
+      "status": "planejada",
+      "recorte": "Descrever e representar trajetos com mudanças de direção a partir de referências."
+    },
+    {
+      "codigo": "EF03MA13",
+      "unidade": "Geometria",
+      "status": "parcial",
+      "recorte": "Relacionar cilindro, cone e cubo ao tambor, ao chapéu e ao dado.",
+      "expansao": "Incluir bloco retangular, pirâmide e esfera em encaixes contextualizados."
+    },
+    {
+      "codigo": "EF03MA14",
+      "unidade": "Geometria",
+      "status": "parcial",
+      "recorte": "Relacionar superfícies do cubo e do cilindro às suas planificações.",
+      "expansao": "Explorar mais prismas, pirâmides, cones e diferentes redes válidas."
+    },
+    {
+      "codigo": "EF03MA15",
+      "unidade": "Geometria",
+      "status": "planejada",
+      "recorte": "Classificar e comparar figuras planas por lados e vértices."
+    },
+    {
+      "codigo": "EF03MA16",
+      "unidade": "Geometria",
+      "status": "parcial",
+      "recorte": "Comparar duas silhuetas com peças de mesma forma e tamanho, mesmo giradas.",
+      "expansao": "Dar controle direto de rotação e ampliar a verificação em malhas."
+    },
+    {
+      "codigo": "EF03MA17",
+      "unidade": "Grandezas e medidas",
+      "status": "planejada",
+      "recorte": "Investigar a dependência do resultado da medição em relação à unidade."
+    },
+    {
+      "codigo": "EF03MA18",
+      "unidade": "Grandezas e medidas",
+      "status": "planejada",
+      "recorte": "Escolher unidades e instrumentos apropriados a comprimento, tempo e capacidade."
+    },
+    {
+      "codigo": "EF03MA19",
+      "unidade": "Grandezas e medidas",
+      "status": "parcial",
+      "recorte": "Medir duas tábuas sobre uma régua em metros para completar o vão.",
+      "expansao": "Incluir estimativas, centímetros, milímetros e unidades não convencionais."
+    },
+    {
+      "codigo": "EF03MA20",
+      "unidade": "Grandezas e medidas",
+      "status": "planejada",
+      "recorte": "Estimar e medir massa e capacidade, com leitura de unidades em rótulos."
+    },
+    {
+      "codigo": "EF03MA21",
+      "unidade": "Grandezas e medidas",
+      "status": "planejada",
+      "recorte": "Comparar áreas de figuras ou faces por observação e superposição."
+    },
+    {
+      "codigo": "EF03MA22",
+      "unidade": "Grandezas e medidas",
+      "status": "parcial",
+      "recorte": "Relacionar o relógio inicial, a hora final e os minutos de duração.",
+      "expansao": "Pedir registro do início e variar intervalos que cruzam uma hora."
+    },
+    {
+      "codigo": "EF03MA23",
+      "unidade": "Grandezas e medidas",
+      "status": "parcial",
+      "recorte": "Ler uma hora digital em associação a um mostrador analógico.",
+      "expansao": "Incluir relação entre horas, minutos e segundos em ações necessárias."
+    },
+    {
+      "codigo": "EF03MA24",
+      "unidade": "Grandezas e medidas",
+      "status": "parcial",
+      "recorte": "Formar R$ 7,50 com diferentes combinações de cédulas e moedas.",
+      "expansao": "Incluir venda, troca e elaboração de problemas de equivalência."
+    },
+    {
+      "codigo": "EF03MA25",
+      "unidade": "Probabilidade e estatística",
+      "status": "implementada",
+      "recorte": "Enumerar as cores possíveis de uma urna e ordenar suas chances pela composição."
+    },
+    {
+      "codigo": "EF03MA26",
+      "unidade": "Probabilidade e estatística",
+      "status": "implementada",
+      "recorte": "Resolver a distribuição de energia a partir de um gráfico de colunas com escala unitária.",
+      "expansao": "Incluir tabelas de dupla entrada e outros tipos de gráfico."
+    },
+    {
+      "codigo": "EF03MA27",
+      "unidade": "Probabilidade e estatística",
+      "status": "parcial",
+      "recorte": "Interpretar frequências do gráfico de sinais e comparar alturas de colunas.",
+      "expansao": "Acrescentar comparação explícita de frequências e dados socioculturais."
+    },
+    {
+      "codigo": "EF03MA28",
+      "unidade": "Probabilidade e estatística",
+      "status": "parcial",
+      "recorte": "Classificar dez registros prontos por cor e montar o gráfico.",
+      "expansao": "Permitir coletar dados de uma pesquisa e registrar tabela própria."
+    }
+  ],
+  "desafios": [
+    {
+      "id": "motor-decimal",
+      "mundo": "numeros",
+      "nivel": "inicial",
+      "habilidades": [
+        "EF03MA02"
+      ],
+      "objetivo": "Compor um número de três ordens associando posição e valor.",
+      "conhecimentosPrevios": "Agrupar de dez em dez e distinguir centenas, dezenas e unidades.",
+      "mecanica": "Transportar blocos com valor para três encaixes, cada um correspondente a uma ordem.",
+      "estrategiasValidas": "200 nas centenas, 40 nas dezenas e 3 nas unidades.",
+      "feedback": "A ordem importa: compare o valor de cada posição com a meta 243.",
+      "dicas": [
+        "Olhe os encaixes de centena, dezena e unidade.",
+        "Use 200, 40 e 3, nessa ordem."
+      ],
+      "criterio": "Os três encaixes corretos ligam o motor e abrem o portão."
+    },
+    {
+      "id": "ponte-grupos",
+      "mundo": "numeros",
+      "nivel": "intermediario",
+      "habilidades": [
+        "EF03MA03",
+        "EF03MA07"
+      ],
+      "objetivo": "Compor 24 como quatro grupos com a mesma quantidade.",
+      "conhecimentosPrevios": "Contar pontos e somar parcelas iguais.",
+      "mecanica": "Levar bandejas de rebites até quatro trechos que passam a sustentar a ponte.",
+      "estrategiasValidas": "Quatro bandejas de 6, em qualquer ordem.",
+      "feedback": "O mecanismo informa o total e lembra que os grupos precisam ser iguais.",
+      "dicas": [
+        "Conte os pontos das bandejas e compare os grupos.",
+        "Some 6 quatro vezes para obter 24."
+      ],
+      "criterio": "Os trechos iguais, com total de 24, geram uma plataforma sólida."
+    },
+    {
+      "id": "carga-com-resto",
+      "mundo": "numeros",
+      "nivel": "avancado",
+      "habilidades": [
+        "EF03MA08"
+      ],
+      "objetivo": "Repartir igualmente e distinguir quociente de resto.",
+      "conhecimentosPrevios": "Contar até 26 e distribuir itens um a um.",
+      "mecanica": "Circular entre equipes e depositar peças de uma reserva comum. O último recipiente recebe só a sobra.",
+      "estrategiasValidas": "6 em cada equipe e 2 no recipiente de sobra. Distribuir por rodadas ou completar grupos funciona.",
+      "feedback": "Compare as equipes e verifique se ainda daria para entregar uma peça a cada uma.",
+      "dicas": [
+        "Distribua em rodadas, uma para cada equipe.",
+        "Quatro equipes de 6 usam 24. Sobram 2."
+      ],
+      "criterio": "Com as 26 peças repartidas corretamente, o elevador sobe."
+    },
+    {
+      "id": "brotos",
+      "mundo": "padroes",
+      "nivel": "inicial",
+      "habilidades": [
+        "EF03MA10"
+      ],
+      "objetivo": "Identificar passo crescente constante e completar termos internos.",
+      "conhecimentosPrevios": "Ordenar números e somar pequenas quantidades.",
+      "mecanica": "Ler a sequência de brotos e carregar dois valores até as posições vazias.",
+      "estrategiasValidas": "12 na terceira posição e 18 na quinta.",
+      "feedback": "Compare os encaixes e observe a ordem dos brotos.",
+      "dicas": [
+        "Compare 6 e 9.",
+        "Some 3 a cada passo."
+      ],
+      "criterio": "Os brotos corretos abrem a passagem."
+    },
+    {
+      "id": "igualdade",
+      "mundo": "padroes",
+      "nivel": "intermediario",
+      "habilidades": [
+        "EF03MA05",
+        "EF03MA11"
+      ],
+      "objetivo": "Comparar expressões diferentes que dão a mesma quantidade.",
+      "conhecimentosPrevios": "Somar e subtrair naturais até 20.",
+      "mecanica": "Transportar expressões gravadas para dois canais de seiva.",
+      "estrategiasValidas": "Quaisquer duas entre 7 + 5, 15 − 3 e 9 + 3.",
+      "feedback": "O mecanismo informa o resultado de cada canal.",
+      "dicas": [
+        "Calcule o resultado de cada peça antes de levá-la.",
+        "Escolha duas expressões que dão 12."
+      ],
+      "criterio": "Os dois canais com 12 liberam a ponte de raízes."
+    },
+    {
+      "id": "decrescente",
+      "mundo": "padroes",
+      "nivel": "avancado",
+      "habilidades": [
+        "EF03MA10"
+      ],
+      "objetivo": "Inferir passo negativo e preencher três lacunas.",
+      "conhecimentosPrevios": "Subtrair pequenas quantidades e observar ordem decrescente.",
+      "mecanica": "Encaixar valores físicos na série de folhas da árvore.",
+      "estrategiasValidas": "28, 20 e 16 nas posições indicadas.",
+      "feedback": "Compare cada peça à sequência vizinha.",
+      "dicas": [
+        "De 32 a 24 há dois passos iguais.",
+        "Retire 4 a cada passo."
+      ],
+      "criterio": "A série correta liga o cesto elevatório."
+    },
+    {
+      "id": "solidos",
+      "mundo": "formas",
+      "nivel": "inicial",
+      "habilidades": [
+        "EF03MA13"
+      ],
+      "objetivo": "Associar três sólidos a objetos do cotidiano.",
+      "conhecimentosPrevios": "Reconhecer faces, bases e pontas por observação.",
+      "mecanica": "Transportar miniaturas até as estátuas do tambor, chapéu e dado.",
+      "estrategiasValidas": "Cilindro, cone e cubo, nessa ordem.",
+      "feedback": "Observe o objeto do encaixe e compare a forma da peça.",
+      "dicas": [
+        "Procure bases, faces e ponta.",
+        "Tambor: cilindro. Chapéu: cone. Dado: cubo."
+      ],
+      "criterio": "Os três pares abrem o templo."
+    },
+    {
+      "id": "planificacoes",
+      "mundo": "formas",
+      "nivel": "intermediario",
+      "habilidades": [
+        "EF03MA14"
+      ],
+      "objetivo": "Associar duas superfícies tridimensionais às suas redes planas.",
+      "conhecimentosPrevios": "Reconhecer quadrado, retângulo e círculo.",
+      "mecanica": "Transportar redes abertas desenhadas nas peças até o cubo e o cilindro.",
+      "estrategiasValidas": "Rede de seis quadrados para o cubo, retângulo e dois círculos para o cilindro.",
+      "feedback": "Confira quais faces aparecem na peça e em qual sólido elas cabem.",
+      "dicas": [
+        "Procure as faces quadradas e o lado curvo aberto.",
+        "O cilindro precisa de um retângulo e dois círculos."
+      ],
+      "criterio": "As redes corretas montam o caminho de pedra."
+    },
+    {
+      "id": "sobreposicao",
+      "mundo": "formas",
+      "nivel": "avancado",
+      "habilidades": [
+        "EF03MA16"
+      ],
+      "objetivo": "Reconhecer congruência apesar da orientação da peça.",
+      "conhecimentosPrevios": "Comparar tamanhos e contornos de triângulos e retângulos.",
+      "mecanica": "Sobrepor automaticamente a peça ao selo quando ela entra no encaixe.",
+      "estrategiasValidas": "Triângulo da mesma largura e altura do selo e retângulo estreito congruente.",
+      "feedback": "Compare as bordas que sobram na sobreposição.",
+      "dicas": [
+        "Veja se o contorno fica coberto por inteiro.",
+        "Procure o triângulo mais largo e o retângulo mais estreito."
+      ],
+      "criterio": "Os dois selos congruentes liberam a plataforma da torre."
+    },
+    {
+      "id": "carpintaria",
+      "mundo": "medidas",
+      "nivel": "inicial",
+      "habilidades": [
+        "EF03MA19"
+      ],
+      "objetivo": "Compor 7 m com duas tábuas e comparar seu comprimento à régua.",
+      "conhecimentosPrevios": "Contar marcas de metro e somar números pequenos.",
+      "mecanica": "Carregar tábuas identificadas e observar sua projeção de comprimento na régua.",
+      "estrategiasValidas": "2 m + 5 m ou 3 m + 4 m, em qualquer ordem.",
+      "feedback": "O mecanismo informa o comprimento total e o compara ao vão.",
+      "dicas": [
+        "Meça o trecho já coberto.",
+        "Complete com 5 m depois de 2 m ou com 4 m depois de 3 m."
+      ],
+      "criterio": "As duas tábuas cobrem exatamente 7 m e abrem a serraria."
+    },
+    {
+      "id": "relogio",
+      "mundo": "medidas",
+      "nivel": "intermediario",
+      "habilidades": [
+        "EF03MA22",
+        "EF03MA23"
+      ],
+      "objetivo": "Interpretar horários e determinar um intervalo dentro da mesma hora.",
+      "conhecimentosPrevios": "Ler minutos no relógio e subtrair até 60.",
+      "mecanica": "Ler os mostradores e transportar fichas de hora, minuto e duração até a comporta.",
+      "estrategiasValidas": "14 horas, 35 minutos e duração de 25 minutos.",
+      "feedback": "Verifique os dois horários e o valor informado para duração.",
+      "dicas": [
+        "Compare os minutos porque os horários estão na mesma hora.",
+        "35 − 10 = 25 minutos."
+      ],
+      "criterio": "A hora de término e o intervalo corretos acionam a comporta."
+    },
+    {
+      "id": "pagamento",
+      "mundo": "medidas",
+      "nivel": "avancado",
+      "habilidades": [
+        "EF03MA24"
+      ],
+      "objetivo": "Estabelecer equivalências monetárias em uma compra.",
+      "conhecimentosPrevios": "Reconhecer reais e centavos e somar seus valores.",
+      "mecanica": "Circular entre guichês de cédulas e moedas e montar um pagamento visível.",
+      "estrategiasValidas": "Qualquer combinação disponível que some 750 centavos, como 5 + 2 + 0,50 ou 2 + 2 + 2 + 1 + 0,50.",
+      "feedback": "Se passar de R$ 7,50, devolva uma peça e confira o estoque.",
+      "dicas": [
+        "Veja o total depois de cada guichê.",
+        "Faltando 50 centavos, use a moeda de 50 centavos."
+      ],
+      "criterio": "O pagamento exato aciona o guincho."
+    },
+    {
+      "id": "urna",
+      "mundo": "possibilidades",
+      "nivel": "inicial",
+      "habilidades": [
+        "EF03MA25"
+      ],
+      "objetivo": "Distinguir resultados possíveis e ordenar suas chances pela frequência da urna.",
+      "conhecimentosPrevios": "Contar objetos e comparar quantidades.",
+      "mecanica": "Observar esferas iguais em tamanho e carregar as cores possíveis para três posições de chance.",
+      "estrategiasValidas": "Azul com cinco, rosa com três, dourado com uma. Verde fica fora.",
+      "feedback": "Confira as cores existentes na urna e sua ordem.",
+      "dicas": [
+        "Conte um grupo de cada vez.",
+        "Azul é a maior chance. Ouro é a menor."
+      ],
+      "criterio": "A ordenação correta abre a cúpula."
+    },
+    {
+      "id": "grafico",
+      "mundo": "possibilidades",
+      "nivel": "intermediario",
+      "habilidades": [
+        "EF03MA26",
+        "EF03MA27"
+      ],
+      "objetivo": "Extrair e comparar frequências de um gráfico de colunas.",
+      "conhecimentosPrevios": "Contar linhas da escala e ligar rótulos às colunas.",
+      "mecanica": "Ler as alturas do gráfico e carregar a quantidade para cada canal.",
+      "estrategiasValidas": "Ilha 6, Bosque 3 e Vale 4.",
+      "feedback": "Volte ao gráfico e compare a altura correspondente a cada canal.",
+      "dicas": [
+        "Cada linha da escala vale uma unidade.",
+        "A barra da Ilha tem 6, a do Bosque 3 e a do Vale 4."
+      ],
+      "criterio": "Os três canais corretos encaixam a passarela."
+    },
+    {
+      "id": "registro",
+      "mundo": "possibilidades",
+      "nivel": "avancado",
+      "habilidades": [
+        "EF03MA27",
+        "EF03MA28"
+      ],
+      "objetivo": "Classificar registros por categoria e representar as frequências com colunas.",
+      "conhecimentosPrevios": "Contar até dez e agrupar por cor.",
+      "mecanica": "Contar sinais anotados e distribuir unidades entre três colunas que crescem no cenário.",
+      "estrategiasValidas": "Quatro sinais azuis, três rosas e três dourados.",
+      "feedback": "O total pode estar certo mesmo que uma coluna esteja alta demais.",
+      "dicas": [
+        "Conte todos os sinais de uma única cor antes de passar à próxima.",
+        "Rosa e ouro aparecem três vezes cada."
+      ],
+      "criterio": "As três colunas corretas ligam o elevador para a última lente."
+    }
+  ]
+}
