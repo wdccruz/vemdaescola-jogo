@@ -25,7 +25,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Separar os arquivos do jogo
-        run: mkdir site && cp -r index.html css js fonts site/
+        run: |
+          mkdir -p site/jogos
+          cp -r index.html css js fonts site/
+          cp -r jogos/trem-das-historias site/jogos/
       - uses: actions/upload-pages-artifact@v3
         with:
           path: site
