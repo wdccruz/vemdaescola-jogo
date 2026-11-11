@@ -5,9 +5,9 @@
   const el = (tag, cls, html) => { const e = document.createElement(tag); if (cls) e.className = cls; if (html != null) e.innerHTML = html; return e; };
   const shuffle = (a) => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
   const wait = (ms) => new Promise((r) => setTimeout(r, ms));
-  const SPEED = 310, JUMP = -660, GRAV = 1850, CH_W = 130, CH_H = 156;
+  const SPEED = 310, JUMP = -660, GRAV = 1850, CH_W = 178, CH_H = 193;
 
-  const stage = $('#stage'), world = $('#world'), back = $('#back'), mid = $('#mid'), things = $('#things'), ctx = $('#ctx');
+  const stage = $('#stage'), world = $('#world'), back = $('#back'), mid = $('#mid'), fore = $('#fore'), things = $('#things'), ctx = $('#ctx');
   const G = { level: -1, mistakes: 0, stars: [], words: [], busy: false, running: false };
   let scene, spots = [], floats = [], scale = 1, viewW = 800, cam = 0, last = 0, near = null, lastProgress = 0;
   const keys = { left: false, right: false };
@@ -27,7 +27,7 @@
     a.el.className = 'actor st-' + st + (a.talking ? ' talk' : '');
   }
   function place(a) {
-    a.el.style.transform = `translate(${a.x - CH_W / 2}px, ${a.y - CH_H + 4}px) scaleX(${a.dir})`;
+    a.el.style.transform = `translate(${a.x - CH_W / 2}px, ${a.y - CH_H + 10}px) scaleX(${a.dir})`;
     if (!a.bubble.hidden) a.bubble.style.transform = `translate(${a.x}px, ${a.y - CH_H - 6}px) translate(-50%, -100%)`;
   }
   function bubble(a, text, ms = 2400) {
@@ -71,13 +71,14 @@
     }
     // letras flutuantes: pega pulando
     for (const f of floats) {
-      if (!f.taken && Math.abs(lilo.x - f.x) < 50 && lilo.y - CH_H < f.y + 34 && lilo.y - CH_H > f.y - 90) { f.taken = true; f.onTake(f); }
+      if (!f.taken && Math.abs(lilo.x - f.x) < 54 && lilo.y - 150 < f.y + 34 && lilo.y - 150 > f.y - 90) { f.taken = true; f.onTake(f); }
     }
     // câmera
     const goal = Math.max(0, Math.min(scene.W - viewW, lilo.x - viewW / 2 + lilo.dir * viewW * 0.08));
     cam += (goal - cam) * Math.min(1, dt * 5);
     world.style.transform = `scale(${scale}) translate(${-cam}px, 0)`;
     back.style.transform = `translate(${cam * 0.35}px, 0)`;
+    fore.style.transform = `translate(${-cam * 0.3}px, 0)`;
     // coisa mais próxima para interagir
     let best = null, bd = 1e9;
     for (const s of spots) { const d = Math.abs(s.x - lilo.x) - s.w / 2; if (d < 60 && d < bd) { bd = d; best = s; } }
@@ -153,7 +154,7 @@
     scene = V.scenes[n]();
     spots = []; floats = []; near = null;
     world.className = 'lv' + (n + 1); world.style.width = scene.W + 'px';
-    back.innerHTML = scene.back; mid.innerHTML = scene.mid; things.innerHTML = '';
+    back.innerHTML = scene.back; mid.innerHTML = scene.mid; fore.innerHTML = scene.fore || ''; things.innerHTML = '';
     scene.spots.forEach(addSpot);
     for (const a of [lilo, lila]) { a.y = GROUND; a.vy = 0; a.ground = true; a.dir = 1; a.target = null; a.cb = null; a.lock = 0; a.bubble.hidden = true; things.append(a.el, a.bubble); }
     lilo.x = scene.start; lila.x = scene.start - 100; cam = 0;
@@ -393,6 +394,8 @@
   document.querySelectorAll('[data-play]').forEach((b) => b.addEventListener('click', async () => { V.audio.play('ok'); run(); await start(); }));
   $('#b-home').addEventListener('click', () => { G.running = false; $('#start').hidden = false; $('#game').classList.remove('playing'); });
 
+  // cenário da biblioteca como fundo das telas de início e fim
+  { const lib = V.scenes[0](); document.querySelectorAll('.screen .bg').forEach((b) => (b.innerHTML = `<div>${lib.back}${lib.mid}</div>`)); }
   // personagens na tela inicial
   $('#start .duo').innerHTML = `<div class="actor st-idle">${V.char('lilo')}</div><div class="actor st-idle">${V.char('lila')}</div>`;
   const duo = $('#start .duo').children;

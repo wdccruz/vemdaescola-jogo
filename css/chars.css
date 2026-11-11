@@ -1,9 +1,9 @@
 /* ---------- Lilo e Lila: animações ---------- */
 .ch { display: block; width: 100%; height: 100%; overflow: visible; }
-.ch-shadow { fill: rgb(20 16 50 / 0.22); transform-origin: 100px 230px; }
+.ch-shadow { transform-origin: 118px 238px; }
 .ch-leg, .ch-arm, .ch-body, .ch-eye, .ch-rib, .ch-mouth, .ch-all, .ch-pupil { transform-box: view-box; }
-.ch-all { transform-origin: 100px 228px; }
-.ch-rib { transform-origin: 100px 40px; animation: rib 2.6s ease-in-out infinite; }
+.ch-all { transform-origin: 118px 236px; }
+.ch-rib { transform-origin: 110px 46px; animation: rib 2.6s ease-in-out infinite; }
 .ch-eye { animation: blink 4.2s infinite; }
 .ch-lila .ch-eye { animation-delay: 1.3s; }
 .m { display: none; }
