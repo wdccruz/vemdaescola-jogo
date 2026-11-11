@@ -30,7 +30,7 @@ const Art = (() => {
 
   const icon = name => `<svg viewBox="0 0 66 66" aria-hidden="true" focusable="false">${icons[name]}</svg>`;
   const sprite = (name, x, y, scale = 1) =>
-    `<g transform="translate(${x} ${y}) scale(${forward ? -scale : scale} ${scale})">${icons[name]}</g>`;
+    `<g transform="translate(${x} ${y}) scale(${scale})">${icons[name]}</g>`;
 
   const palette = [
     ['#6d6791','#f3b791','#ffe2ad','#9e819f','#677d8e','#527b76','#376d67','#204b51'],
@@ -170,5 +170,6 @@ const Art = (() => {
 
   return { icon, scene };
 })();
+
 
 
