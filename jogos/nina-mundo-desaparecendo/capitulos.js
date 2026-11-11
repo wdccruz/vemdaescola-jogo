@@ -6,6 +6,8 @@ const lift = (id,x,y,w,axis,range,period,needs) =>
 const mark = (id,x,y,kind,label,needs) => ({id,x,y,kind,label,needs});
 const pickup = (id,x,y,icon,needs) => ({id,x,y,icon,needs});
 
+const DrawingItems = {bridge:'graphite',vine:'seed',engine:'gear'};
+
 const Items = {
   graphite:['Grafite dourado','Serve para desenhar a ponte apagada da vila.'],
   seed:['Semente de tinta','Pode criar raízes onde a floresta perdeu seu caminho.'],
@@ -39,16 +41,17 @@ const Levels = [
     marks:[
       mark('cora',339,580,'talk','Conversar com Cora'),
       mark('bridge',625,580,'draw','Desenhar a ponte'),
+      {...mark('bridge',982,580,'draw','Desenhar a ponte'),farBank:true},
       mark('mechanism',1475,580,'talk','Examinar o portão'),
       mark('exit',2025,580,'exit','Entrar na floresta','gate')
     ],
-    checkpoint:{x:1020,y:580},
+    checkpoint:{x:1020,y:580,needs:'bridge'},
     scenery:[
       [113,580,'house',1.27],[421,580,'house',1.34],[550,580,'post',1],[998,580,'willow',1.35],
       [1175,580,'house',.98],[1651,580,'house',1.22],[1841,580,'willow',1.23],[2025,580,'arch',1.13]
     ],
     quest:[
-      ['graphite','Encontre o grafite dourado nas varandas.','Suba no telhado mais baixo à direita de Cora. De lá, pule para a varanda alta.'],
+      ['graphite','Pegue o grafite dourado no telhado antes de desenhar a ponte.','Suba no telhado mais baixo à direita de Cora. De lá, pule para a varanda alta.'],
       ['bridge','Reconstrua a ponte sobre o rio.','Chegue perto dos riscos pontilhados da margem e segure X ou Desenhar.'],
       ['gate','Empurre a caixa sobre a placa de cobre.','Ande contra a caixa pelo lado esquerdo. Pare quando ela cobrir o centro da placa.'],
       [null,'Siga até o arco da floresta e interaja.','O arco fica depois da oficina. Agir ou E abre a próxima página.']
@@ -70,7 +73,7 @@ const Levels = [
     marks:[
       mark('fagulha',729,780,'talk','Conversar com Fagulha'),
       mark('vine',810,780,'draw','Desenhar a raiz'),
-      mark('vine',1137,780,'draw','Desenhar a raiz'),
+      {...mark('vine',1137,780,'draw','Desenhar a raiz'),farBank:true},
       mark('lift',1249,780,'talk','Examinar a plataforma'),
       mark('exit',1940,780,'exit','Entrar na torre','page')
     ],

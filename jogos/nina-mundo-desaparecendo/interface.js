@@ -157,8 +157,8 @@ const PaperUI = (() => {
     els.checkpoint.hidden=false;
     checkpointId=setTimeout(()=>{els.checkpoint.hidden=true;},2000);
   }
-  function prompt(mark) {
-    const value = mark ? (mark.kind==='draw' ? (touch.matches?'Segure Desenhar':'Segure X') : (touch.matches?'Agir':'E'))+' · '+mark.label : '';
+  function prompt(mark,block='') {
+    const value = block || (mark ? (mark.kind==='draw' ? (touch.matches?'Segure Desenhar':'Segure X') : (touch.matches?'Agir':'E'))+' · '+mark.label : '');
     if (els.prompt.textContent!==value) els.prompt.textContent=value;
     els.prompt.hidden=!mark;
   }

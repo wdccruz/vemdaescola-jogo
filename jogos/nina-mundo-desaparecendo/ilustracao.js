@@ -252,7 +252,14 @@ const Illustration = (() => {
     const glow=g.createRadialGradient(0,0,4,0,0,29);
     glow.addColorStop(0,'#ffe38e93');glow.addColorStop(1,'#ffe38e00');
     oval(g,0,0,29,29,glow);
-    if(item.icon==='graphite') Characters.pencil(g,0,0,.61,false);
+    if(item.icon==='graphite'){
+      Characters.pencil(g,0,0,.82,true);
+      shape(g,'M-55-46h110q6 0 6 6v8q0 6-6 6H5l-5 6-5-6h-50q-6 0-6-6v-8q0-6 6-6Z','#132830ef','#e8c68c',1.25);
+      g.font='700 14px Baloo, system-ui, sans-serif';
+      g.textAlign='center';
+      g.fillStyle='#fff0c0';
+      g.fillText(Items.graphite[0],0,-31);
+    }
     if(item.icon==='gear'){g.save();gear(g,16,false,0);g.restore();}
     if(item.icon==='stamp'){
       g.rotate(-.15);

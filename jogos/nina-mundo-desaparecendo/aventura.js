@@ -55,7 +55,8 @@ class Adventure {
     const level=Levels[index];
     const flags=new Set(saved?.flags);
     const items=new Set(saved?.items??this.world?.items??[]);
-    const stranded=index===1&&flags.has('checkpoint')&&!flags.has('vine')&&!items.has('seed');
+    const crossing=level.checkpoint.needs;
+    const stranded=crossing&&flags.has('checkpoint')&&!flags.has(crossing)&&!items.has(DrawingItems[crossing]);
     if(stranded) flags.delete('checkpoint');
     const spawn=stranded ? level.spawn : saved?.spawn??level.spawn;
     const player=Physics.body(spawn[0],spawn[1]-54);
@@ -153,10 +154,9 @@ class Adventure {
   hint() {
     const w=this.world;
     w.hint=3.4;
-    const acrossWithoutSeed=w.index===1&&!w.has('seed')&&w.player.x>=w.level.checkpoint.x-52;
-    UI.feedback('Dobri: '+(acrossWithoutSeed
-      ? 'Use Mochila → Voltar ao ponto salvo para buscar a semente na outra margem.'
-      : this.quest()[2]));
+    const mark=w.level.marks.find(candidate=>candidate.farBank);
+    const across=mark&&w.player.x+w.player.w>=mark.x-31;
+    UI.feedback('Dobri: '+((across&&this.drawBlock(mark))||this.quest()[2]));
     UI.sound([554,740]);
     els.scene.focus({preventScroll:true});
   }
@@ -224,20 +224,30 @@ class Adventure {
     return nearest;
   }
 
-  draw(mark,dt,held) {
+  drawBlock(mark) {
+    const w=this.world;
+    if(!mark) return '';
+    const item=DrawingItems[mark.id];
+    if(!w.has(item)){
+      const name=Items[item][0].toLowerCase();
+      if(mark.farBank) return 'Falta '+name+'. Use Mochila → Voltar ao ponto salvo.';
+      if(item==='graphite') return 'Pegue o grafite dourado no telhado à direita de Cora.';
+      return 'Pegue '+name+' para usar o lápis aqui.';
+    }
+    return w.has(mark.needs)?'':'Resolva o desafio anterior para desenhar aqui.';
+  }
+
+  draw(mark,dt,held,block) {
     const w=this.world,p=w.player;
     if(!mark||!held||!p.on) {
       w.drawing=null;
       UI.drawProgress(0);
       return;
     }
-    const requires={bridge:'graphite',vine:'seed',engine:'gear'};
-    const need=requires[mark.id];
-    if(!w.has(mark.needs)||!w.has(need)){
+    if(block){
       if(w.drawing?.mark!==mark){
         w.drawing={mark,time:0,duration:1,locked:true};
-        if(mark.id==='vine'&&mark.x>=w.level.checkpoint.x-62) this.hint();
-        else UI.feedback(need?'O lápis precisa de '+Items[need][0].toLowerCase()+'.':'Ainda falta resolver o mecanismo.');
+        UI.feedback(block);
       }
       return;
     }
@@ -321,7 +331,8 @@ class Adventure {
       if(w.crate.y>w.level.height+90) Object.assign(w.crate,Physics.body(w.level.crate.x,w.level.crate.y,w.crate.w,w.crate.h));
     }
     const nearDraw=this.nearby('draw');
-    this.draw(nearDraw,dt,input.draw);
+    const drawBlock=this.drawBlock(nearDraw);
+    this.draw(nearDraw,dt,input.draw,drawBlock);
     const drawing=w.drawing&&!w.drawing.locked;
     Physics.tickPlayer(p,dt,drawing?0:input.dir,input.jump&&!drawing,input.jumpPressed&&!drawing,input.jumpReleased,w.solids,w.crate);
     p.x=Physics.clamp(p.x,0,w.level.width-p.w);
@@ -350,10 +361,10 @@ class Adventure {
     }
     const action=this.nearby('use');
     w.near=drawing?nearDraw:nearDraw??action;
-    UI.prompt(w.near);
+    UI.prompt(w.near,nearDraw?drawBlock:'');
     if(input.use&&!drawing) {
       if(action) this.interact(action);
-      else if(nearDraw) UI.feedback('Use o lápis aqui. Segure '+(UI.touch.matches?'Desenhar.':'X.'));
+      else if(nearDraw) UI.feedback(drawBlock||'Use o lápis aqui. Segure '+(UI.touch.matches?'Desenhar.':'X.'));
     }
     Characters.tickDobri(w.pet,p,w.solids,dt,w.cheer,w.hint);
     for(const particle of w.particles){

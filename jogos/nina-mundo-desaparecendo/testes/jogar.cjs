@@ -67,6 +67,9 @@ async function village(page,keys) {
   assert.equal(await page.locator('#speaker').textContent(),'Nina');
   await page.locator('#skip').click();
   await keys.walk(590);
+  await wait(page,()=>document.querySelector('#prompt').textContent.includes('Pegue o grafite dourado'));
+  assert.doesNotMatch(await page.locator('#prompt').textContent(),/Segure X/);
+  await shot(page,'10-grafite-ponte');
   await keys.press('x');await sleep(page,260);await keys.release('x');
   assert.ok(!(await snapshot(page)).flags.includes('bridge'));
   await keys.press('ArrowRight');
@@ -89,6 +92,7 @@ async function village(page,keys) {
   await page.locator('#close-bag').click();
   await keys.walk(605);
   await landed(page,580);
+  await wait(page,()=>document.querySelector('#prompt').textContent.includes('Segure X'));
   await keys.draw('bridge');
   await keys.walk(1054);
   assert.ok((await snapshot(page)).flags.includes('checkpoint'));
@@ -151,38 +155,42 @@ async function forest(page,keys) {
   console.log('OK Floresta: caixa como degrau, copa, raiz sólida, travessia autônoma, elevador, página e transição');
 }
 
-async function forestRightBank(browser,url) {
-  for(const hasSeed of [true,false]){
+async function rightBank(browser,url) {
+  const rivers=[
+    {chapter:0,spawn:[1020,580],item:'graphite',crossing:'bridge',inRiver:810,left:625,caption:'Desenhar a ponte',crateX:1153},
+    {chapter:1,spawn:[1158,780],item:'seed',crossing:'vine',inRiver:1005,left:796,caption:'Desenhar a raiz',crateX:452}
+  ];
+  for(const river of rivers) for(const hasItem of [true,false]){
     const page=await browser.newPage({viewport:{width:1100,height:760}});
     try {
-      const items=hasSeed?['graphite','stampV','seed']:['graphite','stampV'];
-      await page.addInitScript(items=>localStorage.setItem('nina-papel-aventura-v1',JSON.stringify({
-        version:1,chapter:1,spawn:[1158,780],flags:['checkpoint'],items,crateX:452,finished:false
-      })),items);
+      const items=river.chapter===0?['stampV']:['graphite','stampV'];
+      if(hasItem) items.push(river.item);
+      await page.addInitScript(save=>localStorage.setItem('nina-papel-aventura-v1',JSON.stringify(save)),{
+        version:1,chapter:river.chapter,spawn:river.spawn,flags:['checkpoint'],items,crateX:river.crateX,finished:false
+      });
       await page.goto(url);
       await page.locator('#resume').click();
-      await landed(page,780);
+      await landed(page,river.spawn[1]);
       const saved=await snapshot(page);
       assert.deepEqual(saved.items,items);
-      assert.ok(!saved.flags.includes('vine'));
-      if(hasSeed){
-        assert.ok(saved.x>1106);
-        assert.match(await page.locator('#prompt').textContent(),/Desenhar a raiz/);
+      assert.ok(!saved.flags.includes(river.crossing));
+      if(hasItem){
+        assert.ok(saved.x>river.inRiver);
+        assert.ok((await page.locator('#prompt').textContent()).includes(river.caption));
         const keys=keyboard(page);
-        await keys.draw('vine');
-        await shot(page,'09-raiz-margem-direita');
-        await keys.walk(1005);
-        await wait(page,()=>adventure.world.player.on?.id==='vine');
-        await keys.walk(796);
-        await landed(page,780);
-        await wait(page,()=>adventure.world.flags.has('firefly'));
+        await keys.draw(river.crossing);
+        await keys.walk(river.inRiver);
+        await wait(page,id=>adventure.world.player.on?.id===id,river.crossing);
+        await keys.walk(river.left);
+        await landed(page,river.spawn[1]);
+        if(river.chapter===1) await wait(page,()=>adventure.world.flags.has('firefly'));
       } else {
-        assert.ok(saved.x<851);
+        assert.ok(saved.x<river.left);
         assert.ok(!saved.flags.includes('checkpoint'));
       }
     } finally {await page.close();}
   }
-  console.log('OK margem direita: raiz desenhada a partir de um save antigo, travessia de volta e recuperação sem semente');
+  console.log('OK margem direita na Vila e na Floresta: desenho, volta e recuperação de saves sem o item');
 }
 
 async function ride(page,keys,id,target) {
@@ -312,7 +320,7 @@ async function run() {
   const url=base+prefix;
   const browser=await chromium.launch({executablePath:process.env.NINA_CHROMIUM||undefined});
   try {
-    await forestRightBank(browser,url);
+    await rightBank(browser,url);
     const page=await browser.newPage({viewport:{width:1440,height:1000}});
     const errors=[];
     page.on('pageerror',error=>errors.push(error.message));
