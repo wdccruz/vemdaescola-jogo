@@ -271,7 +271,7 @@ const Illustration = (() => {
   function drawMark(g,mark,world,time) {
     const done=world.flags.has(mark.id);
     if(mark.kind==='draw' && done)return;
-    const near=world.near?.id===mark.id;
+    const near=world.near===mark;
     const y=mark.y-(mark.kind==='draw'?28:mark.kind==='switch'?42:91);
     g.save();g.translate(mark.x,y);
     if(mark.kind==='draw'){
@@ -298,9 +298,12 @@ const Illustration = (() => {
       g.strokeStyle='#ffe7b498';g.lineWidth=2;g.setLineDash([8,7]);
       g.strokeRect(s.x,s.y,s.w,14);g.setLineDash([]);
       if(ink) {
-        g.beginPath();g.moveTo(s.x,s.y);g.lineTo(s.x+s.w*ink,s.y);
+        const fromRight=world.drawing.mark.x>s.x+s.w/2;
+        const start=fromRight?s.x+s.w:s.x;
+        const end=start+(fromRight?-1:1)*s.w*ink;
+        g.beginPath();g.moveTo(start,s.y);g.lineTo(end,s.y);
         g.strokeStyle='#ffdd89';g.lineWidth=4;g.stroke();
-        star(g,s.x+s.w*ink,s.y,8,'#fff0af');
+        star(g,end,s.y,8,'#fff0af');
       }
       g.restore();
     }
@@ -370,7 +373,7 @@ const Illustration = (() => {
     }
     const p=world.player;
     Characters.dobri(g,world.pet.x,world.pet.y,time,world.pet.mode,p.face);
-    Characters.nina(g,p.x+p.w/2,p.y+p.h,{...p,drawing:Boolean(world.drawing),cheer:world.cheer>0,emotion:world.emotion},time);
+    Characters.nina(g,p.x+p.w/2,p.y+p.h,{...p,scale:1.28,drawing:Boolean(world.drawing),cheer:world.cheer>0,emotion:world.emotion},time);
     for(const v of world.particles){
       g.globalAlpha=Math.min(1,v.life*2.4);
       star(g,v.x,v.y,v.size,v.color);

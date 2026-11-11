@@ -70,17 +70,18 @@ const Levels = [
     marks:[
       mark('fagulha',729,780,'talk','Conversar com Fagulha'),
       mark('vine',810,780,'draw','Desenhar a raiz'),
+      mark('vine',1137,780,'draw','Desenhar a raiz'),
       mark('lift',1249,780,'talk','Examinar a plataforma'),
       mark('exit',1940,780,'exit','Entrar na torre','page')
     ],
-    checkpoint:{x:1158,y:780},
+    checkpoint:{x:1158,y:780,needs:'vine'},
     scenery:[
       [148,780,'willow',1.88],[351,780,'mushroom',1.12],[670,780,'willow',2.45],[1137,780,'mushroom',1.35],
       [1380,780,'willow',2.5],[1712,780,'cave',1.04],[1940,780,'arch',1.17]
     ],
     quest:[
       ['seed','Use a caixa para subir até a semente de tinta.','Empurre a caixa para baixo da ponta esquerda do galho. Pule da caixa para o primeiro galho.'],
-      ['vine','Desenhe uma raiz para Fagulha atravessar.','Volte ao chão perto da margem. Segure Desenhar junto aos riscos.'],
+      ['vine','Desenhe uma raiz para Fagulha atravessar.','No chão, procure a marca do lápis em qualquer margem e segure Desenhar.'],
       ['firefly','Acompanhe Fagulha até o outro lado.','Fagulha vai atravessar sozinha quando a raiz estiver pronta. Espere por ela no outro lado.'],
       ['page','Pegue a página no galho acima do elevador.','Suba no galho baixo, embarque quando a plataforma descer e pule para a direita quando subir.'],
       [null,'Leve a página até o arco da torre.','Desça pelos galhos do lado direito e interaja com o arco.']

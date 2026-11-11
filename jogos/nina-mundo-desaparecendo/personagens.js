@@ -42,14 +42,14 @@ const Characters = (() => {
   }
 
   function nina(g,x,y,pose={},time=0) {
-    const {face=1,stride=0,vx=0,vy=0,on=true,land=0,drawing=false,cheer=false,emotion=''} = pose;
+    const {face=1,stride=0,vx=0,vy=0,on=true,land=0,drawing=false,cheer=false,emotion='',scale=1} = pose;
     const run = on ? Math.min(Math.abs(vx)/245,1) : 0;
     const swing = Math.sin(stride)*run;
     const bend = land*22;
     const lift = on ? -Math.abs(Math.sin(stride))*run*2.3 : 0;
     g.save();
     g.translate(x,y);
-    g.scale(face,1);
+    g.scale(face*scale,scale);
     g.translate(0,lift+bend);
     g.lineCap='round';
     g.lineJoin='round';

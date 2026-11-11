@@ -53,11 +53,15 @@ class Adventure {
 
   openLevel(index,saved) {
     const level=Levels[index];
-    const spawn=saved?.spawn??level.spawn;
+    const flags=new Set(saved?.flags);
+    const items=new Set(saved?.items??this.world?.items??[]);
+    const stranded=index===1&&flags.has('checkpoint')&&!flags.has('vine')&&!items.has('seed');
+    if(stranded) flags.delete('checkpoint');
+    const spawn=stranded ? level.spawn : saved?.spawn??level.spawn;
     const player=Physics.body(spawn[0],spawn[1]-54);
     const world={
       index,level,player,spawn:[...spawn],
-      flags:new Set(saved?.flags),items:new Set(saved?.items??this.world?.items??[]),
+      flags,items,
       tiles:level.tiles.map(tile=>({...tile,x0:tile.x,y0:tile.y,dx:0,dy:0})),
       solids:[],crate:level.crate?Physics.body(saved?.crateX??level.crate.x,level.crate.y,level.crate.w,level.crate.h):null,
       pet:{x:player.x-50,y:player.y-31,vx:0,vy:0,mode:'hover'},
@@ -149,7 +153,10 @@ class Adventure {
   hint() {
     const w=this.world;
     w.hint=3.4;
-    UI.feedback('Dobri: '+this.quest()[2]);
+    const acrossWithoutSeed=w.index===1&&!w.has('seed')&&w.player.x>=w.level.checkpoint.x-52;
+    UI.feedback('Dobri: '+(acrossWithoutSeed
+      ? 'Use Mochila → Voltar ao ponto salvo para buscar a semente na outra margem.'
+      : this.quest()[2]));
     UI.sound([554,740]);
     els.scene.focus({preventScroll:true});
   }
@@ -229,7 +236,8 @@ class Adventure {
     if(!w.has(mark.needs)||!w.has(need)){
       if(w.drawing?.mark!==mark){
         w.drawing={mark,time:0,duration:1,locked:true};
-        UI.feedback(need?'O lápis precisa de '+Items[need][0].toLowerCase()+'.':'Ainda falta resolver o mecanismo.');
+        if(mark.id==='vine'&&mark.x>=w.level.checkpoint.x-62) this.hint();
+        else UI.feedback(need?'O lápis precisa de '+Items[need][0].toLowerCase()+'.':'Ainda falta resolver o mecanismo.');
       }
       return;
     }
@@ -320,7 +328,7 @@ class Adventure {
     if(p.y>w.level.height+66){this.respawn();return;}
     this.pickup();
     const checkpoint=w.level.checkpoint;
-    if(!w.flags.has('checkpoint')&&p.on&&Math.abs(p.x+p.w/2-checkpoint.x)<62&&Math.abs(p.y+p.h-checkpoint.y)<10){
+    if(w.has(checkpoint.needs)&&!w.flags.has('checkpoint')&&p.on&&Math.abs(p.x+p.w/2-checkpoint.x)<62&&Math.abs(p.y+p.h-checkpoint.y)<10){
       w.flags.add('checkpoint');
       w.spawn=[checkpoint.x,checkpoint.y];
       this.save();

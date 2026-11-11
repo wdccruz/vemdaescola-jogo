@@ -151,6 +151,40 @@ async function forest(page,keys) {
   console.log('OK Floresta: caixa como degrau, copa, raiz sólida, travessia autônoma, elevador, página e transição');
 }
 
+async function forestRightBank(browser,url) {
+  for(const hasSeed of [true,false]){
+    const page=await browser.newPage({viewport:{width:1100,height:760}});
+    try {
+      const items=hasSeed?['graphite','stampV','seed']:['graphite','stampV'];
+      await page.addInitScript(items=>localStorage.setItem('nina-papel-aventura-v1',JSON.stringify({
+        version:1,chapter:1,spawn:[1158,780],flags:['checkpoint'],items,crateX:452,finished:false
+      })),items);
+      await page.goto(url);
+      await page.locator('#resume').click();
+      await landed(page,780);
+      const saved=await snapshot(page);
+      assert.deepEqual(saved.items,items);
+      assert.ok(!saved.flags.includes('vine'));
+      if(hasSeed){
+        assert.ok(saved.x>1106);
+        assert.match(await page.locator('#prompt').textContent(),/Desenhar a raiz/);
+        const keys=keyboard(page);
+        await keys.draw('vine');
+        await shot(page,'09-raiz-margem-direita');
+        await keys.walk(1005);
+        await wait(page,()=>adventure.world.player.on?.id==='vine');
+        await keys.walk(796);
+        await landed(page,780);
+        await wait(page,()=>adventure.world.flags.has('firefly'));
+      } else {
+        assert.ok(saved.x<851);
+        assert.ok(!saved.flags.includes('checkpoint'));
+      }
+    } finally {await page.close();}
+  }
+  console.log('OK margem direita: raiz desenhada a partir de um save antigo, travessia de volta e recuperação sem semente');
+}
+
 async function ride(page,keys,id,target) {
   await keys.press('Space');
   await keys.walk(target);
@@ -278,6 +312,7 @@ async function run() {
   const url=base+prefix;
   const browser=await chromium.launch({executablePath:process.env.NINA_CHROMIUM||undefined});
   try {
+    await forestRightBank(browser,url);
     const page=await browser.newPage({viewport:{width:1440,height:1000}});
     const errors=[];
     page.on('pageerror',error=>errors.push(error.message));
