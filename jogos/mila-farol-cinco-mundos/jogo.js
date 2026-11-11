@@ -54,7 +54,7 @@ class Expedition {
     const y=level.ground;
     this.world={index,level,state,player:Physics.body(x,y-54),pet:{x:x-53,y:y-22,mode:'follow',vx:0,vy:0},time:0,fade:1,
       cheer:0,particles:[],carry:null,near:null,hold:0,hints:{},climbing:false,ending:0,
-      tiles:index<0?[tile(0,y,level.width,180,'ground'),tile(190,y-100,135),tile(1600,y-100,110)]:level.tiles.map(s=>({...s,home:s.y,dx:0,dy:0})),
+      tiles:index<0?[tile(0,y,level.width,180,'ground'),tile(190,y-100,135),tile(1600,y-100,110)]:level.tiles.map(s=>({...s,home:s.y,homeX:s.x,dx:0,dy:0})),
       solids:[],crate:level.crate?Physics.body(state.crateX??level.crate.x,level.crate.y,level.crate.w,level.crate.h):null};
     this.acc=0;
     SceneArt.load(level.id);
@@ -64,10 +64,6 @@ class Expedition {
     UI.notice('');
     UI.route(index,this.profile.lenses);
     this.save();
-    if(index>=0){
-      const next=Worlds[index+1];
-      if(next)SceneArt.preload(next.id);
-    }
   }
   save(){
     this.saved=this.profile;
@@ -110,8 +106,9 @@ class Expedition {
     const w=this.world;
     w.solids=w.tiles.filter(s=>(s.need===undefined||w.state.solved[s.need])&&(s.until===undefined||!w.state.solved[s.until]));
     for(const s of w.solids)if(s.moving){
-      const y=s.home-s.range*(1-Math.cos(w.time/s.period*Math.PI*2))/2;
-      s.dy=y-s.y;s.y=y;
+      const amount=s.range*(1-Math.cos(w.time/s.period*Math.PI*2))/2;
+      const x=s.homeX+(s.axis==='x'?amount:0),y=s.home-(s.axis==='x'?0:amount);
+      s.dx=x-s.x;s.dy=y-s.y;s.x=x;s.y=y;
     }
   }
   puzzle(){return this.world.level.stage?.find(p=>!this.world.state.solved[p.step]);}
@@ -174,8 +171,8 @@ class Expedition {
   }
   prompt(t){
     const w=this.world;
-    const act=UI.touch.matches?'Agir':'E';
-    if(!t)return w.carry?(UI.touch.matches?'Devolver':'Q')+' · Devolver à prateleira':'';
+    const act=UI.buttonMode()?'Agir':'E';
+    if(!t)return w.carry?(UI.buttonMode()?'Devolver':'Q')+' · Devolver à prateleira':'';
     if(t.kind==='object')return act+' · Pegar '+t.label;
     if(t.kind==='slot'){
       const selected=this.slots(t.p)[t.index];

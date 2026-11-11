@@ -72,7 +72,7 @@ const stations={
       win:'As tábuas cobriram a régua sem sobrar. A serraria abriu!'},
     {id:'relogio',title:'A hora do moinho',area:'Canais do moinho',kind:'slots',rule:'exact',target:[14,35,25],order:['Hora','Minuto','Duração'],
       objects:[n(14),n(15),n(35),n(25),n(60),n(10)],clock:{hour:14,minute:10,end:'14:35'},
-      task:'O moinho começa às 14:10. Programe o fim às 14:35 e registre quantos minutos ele gira.',
+      task:'Leia o relógio do início. Programe o fim às 14:35 e registre quantos minutos o moinho gira.',
       clue:'As duas horas estão na faixa das 14 horas. Compare os minutos nos dois relógios.',
       help:'Registre 14 horas e 35 minutos no fim. De 10 até 35 passam 25 minutos.',
       win:'14:10 até 14:35 são 25 minutos. A comporta abriu o caminho!'},
@@ -122,7 +122,6 @@ const racks=[
   [[1760,0],[1822,0],[1884,0],[1782,-104],[1844,-104],[1906,-104]]
 ];
 const sockets=[465,1135,1936];
-const gates=[807,1409,2345];
 
 function buildWorld(index){
   const world=Worlds[index];
@@ -135,7 +134,13 @@ function buildWorld(index){
   const upper=index%2?294:270;
   const right=1722;
   const liftHeight=upper-20;
-  const finish=2525;
+  const upperRoutes=[
+    [tile(415,y-176,130),tile(566,y-226,105,20,'lift',{id:'trilho',moving:true,axis:'x',range:92,period:3.8})],
+    [tile(431,y-178,132),tile(590,y-248,110),tile(1148,y-180,160)],
+    [tile(425,y-182,114),tile(566,y-264,126),tile(1220,y-188,130)],
+    [tile(418,y-173,145),tile(597,y-242,124),tile(2000,y-179,143)],
+    [tile(436,y-180,119),tile(587,y-269,125),tile(1166,y-177,158)]
+  ][index];
   const tiles=[
     tile(0,y,1410,178,'ground'),tile(right,y,768,178,'ground'),
     tile(200,y-104,190,24),tile(938,y-104,170,24),tile(1775,y-104,160,24),
@@ -145,10 +150,12 @@ function buildWorld(index){
     tile(1408,y-490,32,490,'gate',{until:1}),
     tile(2345,y-490,35,490,'gate',{until:2}),
     tile(1408,y,right-1405,29,'bridge',{need:1}),
-    tile(2390,y-8,106,21,'lift',{need:2,id:'lens-lift',moving:true,range:liftHeight,period:4.4})
+    tile(2390,y-8,106,21,'lift',{need:2,id:'lens-lift',moving:true,range:liftHeight,period:4.4}),
+    ...upperRoutes
   ];
-  return {...world,width:2810,height:y+320,stage,tiles,upper,finish,
-    ladder:{x:150,y:y-204,h:204},secret:{x:205,y:y-328},checkpoints:[{x:866,y,need:0},{x:1750,y,need:1}],
+  const secrets=[{x:205,y:y-328},{x:640,y:y-286},{x:613,y:y-302},{x:649,y:y-280},{x:638,y:y-307}];
+  return {...world,width:2810,height:y+320,stage,tiles,upper,
+    ladder:{x:[150,114,164,141,132][index],y:y-204,h:204},secret:secrets[index],checkpoints:[{x:866,y,need:0},{x:1750,y,need:1}],
     crate:{x:51,y:y-48,w:52,h:48},lens:{x:2660,y:y-upper},
     sections:[{x:0,style:'exterior'},{x:833,style:index===1?'caverna':index===2?'templo':'oficina'},{x:1722,style:'torre'}]};
 }

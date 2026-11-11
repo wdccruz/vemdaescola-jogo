@@ -61,6 +61,8 @@ async function solveSlots(page,k,p,plan){
     await wait(page,id=>expedition.world.carry?.id===id,id);
     await k.walk(f.x);
     await land(page,p.y);
+    await nap(page,140);
+    await k.walk(f.x);
     await k.tap('e');
     await wait(page,([name,index,id])=>expedition.world.state.slots[name]?.[index]===id,[p.id,index,id]);
   }
@@ -171,9 +173,44 @@ async function mobile(browser,url){
     await wait(page,()=>expedition.world.player.vy<-150&&expedition.world.player.x>114);
     await send('touchEnd',[]);
     await wait(page,()=>expedition.world.player.on);
+    await send('touchStart',[right]);
+    await wait(page,()=>expedition.world.player.x+15>=176);
+    await send('touchEnd',[]);
+    await wait(page,()=>expedition.world.near?.kind==='object'&&expedition.world.near.id===0);
+    await page.locator('[data-control=act]').tap();
+    await wait(page,()=>expedition.world.carry?.id===0);
+    await page.locator('[data-control=undo]').tap();
+    await wait(page,()=>expedition.world.carry===null);
     await shot(page,'08-celular');
     assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true);
     console.log('OK toque emulado: andar, agir, salto com direção simultânea, movimento reduzido e largura');
+  }finally{await page.close();}
+}
+
+async function alternatives(browser,url){
+  const page=await browser.newPage({viewport:{width:1260,height:850}});
+  try {
+    await page.addInitScript(()=>localStorage.setItem('mila-farol-cinco-mundos-v1',JSON.stringify({
+      version:1,location:3,hubX:1185,lenses:[0,1,2],secrets:[],islands:{},finished:false
+    })));
+    await page.goto(url);
+    await page.locator('#resume').click();
+    const l=await page.evaluate(()=>expedition.world.level),k=keys(page);
+    await page.locator('#controls').click();
+    const right=page.locator('[data-control=right]');
+    const box=await right.boundingBox();
+    assert.ok(box);
+    await page.mouse.move(box.x+box.width/2,box.y+box.height/2);
+    await page.mouse.down();
+    await wait(page,()=>expedition.world.player.x>140);
+    await page.mouse.up();
+    await page.locator('#controls').click();
+    await solveSlots(page,k,l.stage[0],[0,3]);
+    await solveSlots(page,k,l.stage[1],plans[3][1]);
+    await k.walk(1764);
+    await solveBins(page,k,l.stage[2],[0,3,1,1]);
+    assert.ok((await state(page)).solved.every(Boolean));
+    console.log('OK alternativas jogadas: 2 + 5 metros, três cédulas de R$ 2, R$ 1 e 50 ¢; movimento por mouse');
   }finally{await page.close();}
 }
 
@@ -195,6 +232,7 @@ async function run(){
     assert.deepEqual(errors,[]);
     await page.close();
     await mobile(browser,url);
+    if(process.env.MILA_ATE!=='ilha1')await alternatives(browser,url);
     const other=await browser.newPage();
     await other.goto(base+'/iframe.html');
     const iframe=other.frameLocator('iframe');

@@ -31,14 +31,14 @@
 <div class="stage" id="stage">
 <canvas id="scene" tabindex="0" aria-label="Cenário de plataforma. Use setas ou A e D para andar, Espaço para pular, E para agir e Q para devolver."></canvas>
 <p id="notice" class="notice" role="status" hidden></p>
-<p id="prompt" class="prompt" hidden></p>
+<p id="prompt" class="prompt" aria-live="polite" hidden></p>
 <p id="carry" class="carry" aria-live="polite" hidden></p>
 </div>
 <div class="touch" aria-label="Controles por toque">
 <div><button data-control="left" aria-label="Andar à esquerda">←</button><button data-control="right" aria-label="Andar à direita">→</button></div>
 <div><button data-control="jump"><b aria-hidden="true">↑</b>Pular</button><button data-control="act"><b aria-hidden="true">✦</b>Agir</button><button data-control="undo"><b aria-hidden="true">↶</b>Devolver</button></div>
 </div>
-<div class="keys"><span><kbd>←</kbd> <kbd>→</kbd> Andar</span><span><kbd>Espaço</kbd> Pular ou subir</span><span><kbd>E</kbd> Pegar / agir</span><span><kbd>Q</kbd> Devolver</span><span><kbd>I</kbd> Mapa e mochila</span></div>
+<div class="keys"><span><kbd>←</kbd> <kbd>→</kbd> Andar</span><span><kbd>Espaço</kbd> Pular ou subir</span><span><kbd>E</kbd> Pegar / agir</span><span><kbd>Q</kbd> Devolver</span><span><kbd>I</kbd> Mapa e mochila</span><button id="controls" aria-pressed="false">Controles na tela</button></div>
 </section>
 <section id="ending" class="cover ending" hidden>
 <div class="cover-copy"><p class="kicker">✦ Cinco lentes reunidas</p><h2 id="end-title" tabindex="-1">O farol voltou a brilhar!</h2><p>Mila e Tuca devolveram a luz às ilhas. As pontes, trilhos, canais e estrelas voltaram a guiar quem vive ali.</p><p id="secrets"></p><button class="primary" id="restart">Jogar novamente ↻</button></div>

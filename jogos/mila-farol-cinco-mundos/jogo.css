@@ -34,6 +34,7 @@ canvas{display:block;width:100%;height:100%;touch-action:none;outline-offset:-2p
 .notice{left:10px;top:10px;max-width:min(560px,90%)}.prompt{bottom:12px;left:50%;translate:-50% 0;text-align:center;width:max-content}.carry{right:10px;top:10px;color:var(--gold);max-width:48%}
 .notice:not([hidden])+.prompt+.carry{top:auto;bottom:55px}
 .keys{display:flex;gap:8px 17px;justify-content:center;flex-wrap:wrap;color:#dce8dc;font-size:.77rem;padding:10px}
+.keys span{align-self:center}#controls{border:0;border-radius:5px;color:#ffe3a7;background:#2c4853;padding:4px 7px;font-size:.75rem}
 kbd{font:750 .8rem var(--round);color:#fff3d4;background:#264552;border:1px solid #bdc3aa80;border-bottom-width:2px;border-radius:4px;padding:0 4px}
 .touch{display:none}
 .ending{background-image:url('./assets/farol.webp')}.ending h2{font:700 clamp(2.9rem,6.5vw,5.5rem)/.94 var(--serif);letter-spacing:-.045em;margin:14px 0}
@@ -41,6 +42,12 @@ kbd{font:750 .8rem var(--round);color:#fff3d4;background:#264552;border:1px soli
 dialog{width:min(560px,100% - 24px);background:#193746;color:var(--text);border:1px solid #e3bc80;border-radius:17px;padding:18px;box-shadow:0 20px 60px #06141bbd}
 dialog::backdrop{background:#061923c9}.speech{margin-top:10px;font:650 1.25rem/1.24 var(--round)}
 .map-list{padding:0;list-style:none;margin:12px 0}.map-list li{border-top:1px solid var(--line);padding:6px 0}.map-list span{color:var(--gold);float:right}
+@media(min-width:741px) and (pointer:fine){
+.with-controls .touch,.with-controls .touch>div{display:flex;gap:8px}
+.with-controls .touch{justify-content:center;gap:27px;padding:7px}
+.touch button{min-width:60px;min-height:47px;border:1px solid #c7d3b885;border-radius:9px;color:#fff1cf;background:#294a58;touch-action:none;font:750 .88rem var(--round);padding:4px 8px}
+.touch button b{margin-right:5px}.touch button.held{background:#57736b}
+}
 @media(max-width:740px),(pointer:coarse){
 .shell{width:calc(100% - 18px)}header{min-height:54px}.brand{font-size:1.07rem;gap:6px}.brand img{width:31px;height:31px}
 .cover{min-height:510px;align-items:end;border-radius:16px;background-position:65% 15%;background-size:auto 75%}

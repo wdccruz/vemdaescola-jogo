@@ -68,6 +68,12 @@ const UI=(()=>{
   });
   el.inventory.addEventListener('close',()=>{if(active)el.scene.focus({preventScroll:true});});
   el['close-map'].addEventListener('click',()=>el.inventory.close());
+  el.controls.addEventListener('click',()=>{
+    const shown=el.game.classList.toggle('with-controls');
+    el.controls.setAttribute('aria-pressed',shown);
+    el.scene.focus({preventScroll:true});
+  });
+  const buttonMode=()=>touch.matches||el.game.classList.contains('with-controls');
   function route(index,lenses){
     el.route.innerHTML=Worlds.map((world,i)=>`<li ${i===index?'aria-current="step"':''}>
       <span class="seal" style="--accent:${world.color}" aria-hidden="true">${lenses.includes(i)?'✓':world.icon}</span>
@@ -108,6 +114,6 @@ const UI=(()=>{
     label(el.sound,enabled?'Som ligado':'Som desligado');
     if(!enabled&&gain)gain.gain.value=0;else sound([392,523,659]);
   });
-  return {el,touch,reduced,clear,input,blocked,label,display,show,speak,route,map,notice,sound};
+  return {el,touch,reduced,clear,input,blocked,label,display,show,speak,route,map,notice,sound,buttonMode};
 })();
 
