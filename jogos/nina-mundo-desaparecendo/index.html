@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#101f29">
+  <meta name="description" content="Uma aventura de plataforma em um mundo feito de papel, tinta e imaginação.">
+  <title>Nina e o Mundo que Está Desaparecendo</title>
+  <link rel="icon" href="./assets/lapis.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="./jogo.css">
+  <script defer src="./fisica.js"></script>
+  <script defer src="./capitulos.js"></script>
+  <script defer src="./personagens.js"></script>
+  <script defer src="./ilustracao.js"></script>
+  <script defer src="./interface.js"></script>
+  <script defer src="./aventura.js"></script>
+</head>
+<body>
+  <div class="shell">
+    <header class="masthead">
+      <a class="brand" href="./"><img src="./assets/lapis.svg" width="39" height="39" alt=""><span>Vem da <strong>Escola</strong></span></a>
+      <button class="small" id="sound" type="button" aria-pressed="false">Som desligado</button>
+    </header>
+    <main>
+      <section class="cover" id="cover" aria-labelledby="title">
+        <div class="cover-art"></div>
+        <div class="cover-copy">
+          <p class="kicker"><span aria-hidden="true">✦</span> Um livro de aventuras</p>
+          <h1 id="title">Nina <span>e o mundo que está<br><em>desaparecendo</em></span></h1>
+          <p>As páginas começaram a sumir. Com um lápis mágico e um amigo de papel, Nina pode desenhar um novo final.</p>
+          <div class="actions">
+            <button class="primary" id="start" type="button">Abrir o livro <span aria-hidden="true">→</span></button>
+            <button class="small" id="resume" type="button" hidden>Continuar aventura</button>
+          </div>
+        </div>
+      </section>
+      <section class="game" id="game" hidden aria-label="Aventura">
+        <div class="hud">
+          <div><p class="kicker" id="chapter"></p><h2 id="place"></h2></div>
+          <div class="hud-buttons">
+            <button class="small" id="hint" type="button">Dica do Dobri</button>
+            <button class="small" id="bag" type="button">Mochila <span id="count">0</span></button>
+          </div>
+        </div>
+        <p class="quest" id="quest" aria-live="polite"></p>
+        <div class="stage" id="stage">
+          <canvas id="scene" tabindex="0" aria-label="Cenário de plataforma. Use A e D ou setas para andar, Espaço para pular, E para interagir e X para desenhar."></canvas>
+          <div class="prompt" id="prompt" hidden></div>
+          <div class="toast" id="toast" role="status" hidden></div>
+          <div class="checkpoint" id="checkpoint" aria-label="Ponto salvo" hidden>✦ Ponto salvo</div>
+          <div class="drawing" id="drawing" hidden><span id="drawing-label">Desenhando…</span><progress id="ink-progress" max="1" value="0"></progress></div>
+        </div>
+        <div class="touch" aria-label="Controles por toque">
+          <div class="touch-group">
+            <button data-control="left" type="button" aria-label="Andar para a esquerda"><b>←</b></button>
+            <button data-control="right" type="button" aria-label="Andar para a direita"><b>→</b></button>
+          </div>
+          <div class="touch-group">
+            <button data-control="jump" type="button"><b aria-hidden="true">↑</b><span>Pular</span></button>
+            <button data-control="use" type="button"><b aria-hidden="true">✦</b><span>Agir</span></button>
+            <button data-control="draw" type="button"><b aria-hidden="true">✎</b><span>Desenhar</span></button>
+          </div>
+        </div>
+        <div class="keys" aria-label="Atalhos do teclado">
+          <span><kbd>←</kbd> <kbd>→</kbd> Andar</span><span><kbd>Espaço</kbd> Pular</span><span><kbd>E</kbd> Interagir</span><span><kbd>X</kbd> Segurar para desenhar</span><span><kbd>I</kbd> Mochila</span>
+        </div>
+      </section>
+      <section class="ending" id="ending" hidden>
+        <div class="ending-copy">
+          <p class="kicker">✦ A última página</p>
+          <h2 id="ending-title" tabindex="-1">Um final para Borrão</h2>
+          <p>As cores voltaram. Nina fechou o livro e, da estante, ouviu um último farfalhar de asas.</p>
+          <blockquote>“Toda grande aventura começa quando alguém abre um livro.”</blockquote>
+          <p id="secrets"></p>
+          <button class="primary" id="restart" type="button">Jogar novamente <span aria-hidden="true">↻</span></button>
+        </div>
+      </section>
+      <ol class="route" aria-label="Capítulos">
+        <li><span class="seal village" aria-hidden="true">⌂</span><div><small>Capítulo 1</small><strong>A Vila de Papel</strong></div></li>
+        <li><span class="seal forest" aria-hidden="true">❧</span><div><small>Capítulo 2</small><strong>A Floresta dos Sussurros</strong></div></li>
+        <li><span class="seal tower" aria-hidden="true">♜</span><div><small>Capítulo 3</small><strong>A Torre das Páginas Perdidas</strong></div></li>
+      </ol>
+    </main>
+    <footer><span>Nina e o Mundo que Está Desaparecendo</span><span>Uma aventura do Vem da Escola</span></footer>
+  </div>
+  <dialog id="conversation" aria-labelledby="speaker">
+    <div class="speech">
+      <canvas id="portrait" width="104" height="104" aria-hidden="true"></canvas>
+      <div><p class="kicker" id="speaker"></p><p id="line"></p></div>
+    </div>
+    <div class="dialog-actions"><button class="plain" id="skip" type="button">Pular conversa</button><button class="primary" id="forward" type="button" autofocus>Continuar →</button></div>
+  </dialog>
+  <dialog id="inventory" aria-labelledby="bag-title">
+    <h2 id="bag-title">Mochila de Nina</h2>
+    <ul id="items"></ul>
+    <div class="dialog-actions"><button class="plain" id="close-bag" type="button">Voltar ao jogo</button><button class="primary" id="recover" type="button">Voltar ao ponto salvo</button></div>
+  </dialog>
+  <noscript>Ative o JavaScript para jogar.</noscript>
+</body>
+</html>
