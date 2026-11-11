@@ -114,7 +114,7 @@ async function campaign(page){
     await page.evaluate(()=>SceneArt.load(expedition.world.level.id).decode());
     for(const [step,p] of l.stage.entries()){
       if(i===0&&step===0){
-        assert.match(await page.locator('#guide').textContent(),/aperte E para pegá-la/);
+        assert.match(await page.locator('#guide').textContent(),/peças no chão.*aperte E para pegá-la/);
         await k.walk(185);await k.tap('e');
         assert.match(await page.locator('#guide').textContent(),/Você leva 100/);
         await k.walk(p.fixtures[0].x);await k.tap('e');

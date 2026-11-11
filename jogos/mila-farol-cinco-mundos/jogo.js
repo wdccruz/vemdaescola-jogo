@@ -149,9 +149,10 @@ class Expedition {
     }else if(p.kind==='slots'){
       if(item)message='Você leva '+item.label+'. Chegue perto de um encaixe e aperte '+act+' de novo.';
       else if(this.slots(p).every(id=>id!==null))message='Confira a montagem. Perto de um encaixe, aperte '+act+' para retirar a peça.';
+      else if(p.id==='motor-decimal')message='Comece pelas peças no chão. Chegue perto de uma e aperte '+act+' para pegá-la.';
       else message='Chegue perto de uma peça e aperte '+act+' para pegá-la. Para subir na prateleira, use '+jump+'.';
       if(p.id==='motor-decimal'){
-        marker=item?{x:536,y:l.ground-169,label:'Encaixes'}:{x:278,y:l.ground-151,label:'Peças'};
+        marker=item?{x:536,y:l.ground-169,label:'Encaixes'}:{x:278,y:l.ground-55,label:'Peças'};
       }
     }else{
       message='Chegue perto de um '+(p.kind==='cash'?'guichê':'recipiente')+' e aperte '+act+' para acrescentar uma unidade. '+undo+' retira uma.';
