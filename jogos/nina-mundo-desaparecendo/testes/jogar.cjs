@@ -115,6 +115,8 @@ async function forest(page,keys) {
   await keys.jump(866,411);
   assert.ok((await snapshot(page)).items.includes('stampF'));
   await keys.walk(754);
+  await landed(page,509);
+  await keys.walk(797);
   await landed(page,780);
   await keys.draw('vine');
   await keys.walk(1160);
@@ -131,9 +133,10 @@ async function forest(page,keys) {
   await wait(page,y=>adventure.world.player.on?.id==='firelift'&&adventure.world.player.y+54<y-20,liftHeight);
   await shot(page,'03-floresta');
   await wait(page,()=>adventure.world.player.on?.id==='firelift'&&adventure.world.player.y+54<580);
-  await keys.jump(1507,516);
-  assert.ok((await snapshot(page)).items.includes('page'));
-  await keys.walk(1880);
+  await keys.jump(1477,516);
+  await keys.walk(1508);
+  await wait(page,()=>adventure.world.items.has('page'));
+  await keys.walk(1933);
   await landed(page,780);
   await keys.action('e');
   await page.locator('#conversation').waitFor();
@@ -161,7 +164,8 @@ async function tower(page,keys) {
   await ride(page,keys,'gearLift',758);
   await wait(page,()=>adventure.world.player.on?.id==='gearLift'&&adventure.world.player.y+54<923);
   await keys.jump(933,864);
-  assert.ok((await snapshot(page)).flags.includes('checkpoint'));
+  await keys.walk(944);
+  await wait(page,()=>adventure.world.flags.has('checkpoint'));
   await keys.walk(1040);
   await keys.action('e');
   await page.locator('#conversation').waitFor();
@@ -172,7 +176,9 @@ async function tower(page,keys) {
   await wait(page,()=>adventure.world.flags.has('moon'));
   await keys.walk(1023);
   await keys.jump(1185,762);
+  await keys.walk(1186);
   assert.ok((await snapshot(page)).items.includes('stampT'));
+  await keys.walk(1130);
   await keys.jump(991,649);
   await keys.action('e');
   await wait(page,()=>adventure.world.flags.has('seal'));
@@ -194,10 +200,11 @@ async function tower(page,keys) {
   await page.locator('#skip').click();
   await keys.walk(1540);
   await keys.draw('end');
+  await shot(page,'06-pagina');
   await page.locator('#ending').waitFor();
   assert.match(await page.locator('blockquote').textContent(),/Toda grande aventura começa/);
   assert.match(await page.locator('#secrets').textContent(),/3 de 3/);
-  await shot(page,'06-final');
+  await shot(page,'08-final');
   await page.reload();
   await page.locator('#resume').click();
   await page.locator('#ending').waitFor();
@@ -274,6 +281,9 @@ async function run() {
     await page.evaluate(()=>document.fonts.ready);
     assert.equal(await page.locator('#sound').getAttribute('aria-pressed'),'false');
     await shot(page,'01-capa');
+    await page.locator('#sound').click();
+    assert.equal(await page.locator('#sound').getAttribute('aria-pressed'),'true');
+    await page.locator('#sound').click();
     await page.locator('#start').click();
     await page.locator('#skip').click();
     const keys=keyboard(page);

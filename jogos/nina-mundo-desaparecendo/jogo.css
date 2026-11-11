@@ -47,6 +47,7 @@ footer{display:flex;justify-content:space-between;gap:10px;color:var(--muted);fo
 .quest{padding:0 16px 9px;color:#e8e5ce;font-size:.86rem;min-height:29px}
 .stage{position:relative;height:clamp(420px,49vw,660px);background:#183b42;overflow:hidden;isolation:isolate}
 #scene{width:100%;height:100%;display:block;touch-action:none;outline-offset:-4px}
+#scene:focus-visible{outline:2px solid #ebd8a3a0;outline-offset:-2px}
 .prompt,.toast,.checkpoint,.drawing{position:absolute;pointer-events:none;border:1px solid #eac88e80;box-shadow:0 3px 15px #07171c80;border-radius:12px;background:#132830f4;color:#fff0ca}
 .prompt{left:50%;bottom:14px;translate:-50% 0;padding:7px 14px;font:750 1rem/1.2 var(--round);max-width:90%;width:max-content;text-align:center}
 .toast{top:12px;left:12px;padding:8px 12px;font:.9rem/1.3 var(--round);max-width:min(480px,90%)}

@@ -58,25 +58,25 @@ const Levels = [
     name:'A Floresta dos Sussurros', short:'Floresta dos Sussurros', art:'floresta', width:2030,height:1030, spawn:[80,780], base:780,
     palette:['#153741','#427b71','#9e6c76','#d9b48b','#31595c','#152e3a'],
     tiles:[
-      tile(0,780,791,148,'ground'),tile(1106,780,924,148,'ground'),
+      tile(0,780,851,148,'ground'),tile(1106,780,924,148,'ground'),
       tile(446,613,152),tile(613,509,167),tile(804,411,134),tile(1016,407,116),
       tile(1184,704,108),lift('firelift',1278,725,111,'y',205,4.6,'firefly'),
       tile(1401,516,176),tile(1588,619,135),tile(1739,674,143),
-      {...tile(786,780,327,28,'bridge'),id:'vine',needs:'vine'}
+      {...tile(848,780,265,28,'root'),id:'vine',needs:'vine'}
     ],
     solids:[],
     crate:{x:242,y:726,w:58,h:54},
     items:[pickup('seed',695,474,'seed'),pickup('stampF',873,376,'stamp'),pickup('page',1508,480,'page','firefly')],
     marks:[
       mark('fagulha',729,780,'talk','Conversar com Fagulha'),
-      mark('vine',768,780,'draw','Desenhar a raiz'),
+      mark('vine',810,780,'draw','Desenhar a raiz'),
       mark('lift',1249,780,'talk','Examinar a plataforma'),
-      mark('exit',1881,780,'exit','Entrar na torre','page')
+      mark('exit',1940,780,'exit','Entrar na torre','page')
     ],
     checkpoint:{x:1158,y:780},
     scenery:[
       [148,780,'willow',1.88],[351,780,'mushroom',1.12],[670,780,'willow',2.45],[1137,780,'mushroom',1.35],
-      [1380,780,'willow',2.5],[1720,780,'mushroom',1.65],[1881,780,'arch',1.17]
+      [1380,780,'willow',2.5],[1712,780,'cave',1.04],[1940,780,'arch',1.17]
     ],
     quest:[
       ['seed','Use a caixa para subir até a semente de tinta.','Empurre a caixa para baixo da ponta esquerda do galho. Pule da caixa para o primeiro galho.'],
@@ -113,7 +113,7 @@ const Levels = [
       mark('blot',1437,330,'talk','Conversar com Borrão','stair'),
       mark('end',1554,330,'draw','Desenhar o final de Borrão','metBlot')
     ],
-    checkpoint:{x:912,y:864},
+    checkpoint:{x:944,y:864},
     scenery:[
       [211,1110,'books',1.5],[465,1110,'books',1.3],[602,1110,'clock',1.15],[1014,1110,'books',2.25],
       [1007,864,'clock',1.09],[1136,762,'books',1.03],[983,407,'clock',1.15],[1545,330,'arch',1.45]

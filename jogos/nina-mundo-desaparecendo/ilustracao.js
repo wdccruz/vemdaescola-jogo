@@ -125,9 +125,15 @@ const Illustration = (() => {
 
   function prop(g,x,y,type,s,i,time,state) {
     g.save();g.translate(x,y);g.scale(s,s);
-    if(type==='house')house(g,i);
-    if(type==='willow')willow(g,i);
+    if(type==='house'){g.globalAlpha=.84;house(g,i);}
+    if(type==='willow'){g.globalAlpha=.57;willow(g,i);}
     if(type==='books')bookStack(g);
+    if(type==='cave'){
+      shape(g,'M-85 0Q-80-43-64-80L-43-87-21-116 18-109 53-88 74-65 89 0Z','#37515bd9','#34545b',2);
+      arched(g,-49,0,98,81,'#263946','#6c7e77');
+      shape(g,'M-76-17l11-25m9-30 20-6m58-16 29 12 12 17M67-41l12 32','', '#a2a98885',2.5);
+      for(let n=0;n<7;n++)star(g,-34+n*11,-19-rand(n+1)*41,2.5,'#f8cc84a4');
+    }
     if(type==='mushroom'){
       shape(g,'M-11 1q7-21 2-45h17Q4-17 16 1Z','#d7b791','#5c505d',1.5);
       shape(g,'M-37-38q7-27 35-31 31-1 40 31-40 18-75 0Z','#bc7b8b','#574e64',1.6);
@@ -160,6 +166,18 @@ const Illustration = (() => {
     const [deep,light,rose,gold,edge,shadow]=level.palette;
     const {x,y,w,h,style}=s;
     g.save();g.translate(x,y);
+    if(style==='root'){
+      shape(g,`M0 0Q${w*.45} -10 ${w} 0v6Q${w*.78} 32 ${w*.47} 20T0 7Z`,'#8b7264','#3b5050',2);
+      for(let n=0;n<9;n++){
+        const dx=14+n*w/9;
+        g.save();g.translate(dx,3);
+        shape(g,'M0 10Q-4 1-12-5-1-9 5 5 9-4 19-3 15 6 4 10Z','#86a783','#476954',1.2);
+        g.restore();
+      }
+      line(g,[[0,1],[w,1]],'#cbcb8c',3);
+      g.restore();
+      return;
+    }
     const wood=style==='bridge'||style==='lift';
     const top=wood?'#e5bd85':style==='roof'?rose:style==='books'?'#a18b9d':light;
     const fill=g.createLinearGradient(0,0,0,h);
@@ -288,6 +306,29 @@ const Illustration = (() => {
     }
   }
 
+  function finalPage(g,world) {
+    const ratio=world.flags.has('end')?1:world.drawing?.mark.id==='end'?world.drawing.time/world.drawing.duration:0;
+    if(!ratio)return;
+    g.save();g.translate(1554,242);
+    const halo=g.createRadialGradient(0,0,8,0,0,133);
+    halo.addColorStop(0,'#ffe9a7cb');halo.addColorStop(1,'#ffe9a700');
+    oval(g,0,0,133,133,halo);
+    shape(g,'M-62-48Q-18-60 0-39 18-60 62-48v88Q24 30 0 49-24 30-62 40Z','#fff0bb','#cb9b79',2.6);
+    line(g,[[0,-39],[0,44]],'#c4a27d',1.5);
+    g.save();
+    g.beginPath();g.rect(-59,-54,118*ratio,110);g.clip();
+    shape(g,'M-54 22q18-23 47 0v9q-25-8-47 0ZM9 25q20-22 43-3v10q-19-5-43 5Z','#8aac8b');
+    arched(g,-47,17,34,45,'#8ca8a8','#9d706c');
+    line(g,[[-30,-18],[-30,16]],'#f9dc9d',2);
+    line(g,[[-46,-1],[-14,-1]],'#f9dc9d',2);
+    star(g,28,-17,15,'#d9a07e');
+    star(g,44,-6,6,'#c67b87');
+    line(g,[[16,14],[25,19],[40,11]],'#826a82',2.3);
+    g.restore();
+    if(ratio<1)star(g,-58+ratio*118,36,8,'#ffffd8');
+    g.restore();
+  }
+
   function paint(g,world,cam,scale,density,reduced) {
     const time=reduced?0:world.time;
     g.setTransform(scale*density,0,0,scale*density,0,0);
@@ -322,6 +363,7 @@ const Illustration = (() => {
     if(world.index===0)Characters.cora(g,339,580,time);
     if(world.fly)Characters.firefly(g,world.fly.x,world.fly.y,time);
     if(world.index===2 && world.flags.has('stair'))Characters.blot(g,1440,330,time,world.flags.has('metBlot'));
+    if(world.index===2)finalPage(g,world);
     if(world.apparition>0 && world.index<2){
       g.save();g.globalAlpha=Math.min(.62,world.apparition*.48);
       Characters.blot(g,world.index===0?1001:1517,world.index===0?580:516,time);g.restore();
