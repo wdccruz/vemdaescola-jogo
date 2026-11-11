@@ -52,6 +52,10 @@ footer{display:flex;justify-content:space-between;gap:10px;color:#a4b2c8;padding
 .chapter h2{font:800 clamp(2.4rem,5vw,4.1rem)/.94 var(--display);margin:7px 0 0;letter-spacing:-.035em}
 .chapter h2:focus,.challenge-heading h3:focus,.ending h2:focus{outline:none}
 .scene-caption{position:absolute;bottom:12px;left:15px;padding:5px 11px;background:#132235e8;color:#ffe8b6;border:1px solid #ffdc9b65;border-radius:100px;font:700 .89rem/1.25 var(--display)}
+.whistle{position:absolute;right:12px;bottom:10px;display:grid;place-items:center;width:44px;height:44px;border:1px solid #ffdc9b88;border-radius:50%;background:#132235ec;color:#ffe8b6}
+.whistle:hover{background:#33445a}
+.whistle svg{width:24px;height:24px}
+.chapter.turn .scenery{animation:turn .58s ease-out both}
 .workbench{color:#262839;background:radial-gradient(ellipse at 0 0,#fff9ec,transparent 70%),var(--paper);padding:22px 34px 19px;border-radius:0 0 22px 22px;min-width:0}
 .challenge-top,.feedback-row{display:flex;justify-content:space-between;align-items:center;gap:12px}
 .challenge-heading .eyebrow{color:var(--accent)}
@@ -98,7 +102,7 @@ button.slot:not(:disabled):hover{background:#f0e1bf}
 .next{min-height:43px;font-size:1.06rem;flex:none}
 .ending{min-height:545px;display:grid;align-items:center;padding:34px}
 .ending-card{max-width:460px;padding:28px 32px 31px;border:1px solid #f2cb7b80;border-radius:20px;background:#111a30e8;box-shadow:0 17px 45px #0b142ea0}
-.ending h2{font:800 clamp(2.8rem,6.8vw,5.2rem)/.94 var(--display);letter-spacing:-.035em;margin:9px 0 13px}
+.ending h2{font:800 clamp(2.6rem,4.4vw,3.75rem)/.94 var(--display);letter-spacing:-.035em;margin:9px 0 13px}
 .ending-card>p:not(.eyebrow){color:#e8e2e5}
 .stamps{display:flex;gap:10px;margin-top:16px}
 .stamps .route-art{border:1px dashed #f1cb83;width:49px;height:49px;transform:rotate(-7deg)}
@@ -110,12 +114,17 @@ button.slot:not(:disabled):hover{background:#f0e1bf}
 .glint{animation:glint 2.5s ease-in-out infinite alternate;transform-box:fill-box;transform-origin:center}
 .sparkle:nth-child(3n){animation-delay:-1.4s}
 .reward{animation:arrive .52s ease both}
+.train-motion{animation:roll .68s cubic-bezier(.16,.63,.28,1) both}
+.locomotive.greet{animation:greet .45s ease both}
 @keyframes arrive{from{opacity:.15;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
 @keyframes puff{0%{opacity:0;transform:translate(12px,9px) scale(.7)}25%{opacity:.8}100%{opacity:0;transform:translate(-24px,-24px) scale(1.25)}}
 @keyframes bob{50%{transform:translateY(-5px) rotate(-3deg)}}
 @keyframes blink{0%,44%,48%,100%{transform:scaleY(1)}46%{transform:scaleY(.12)}}
 @keyframes glint{from{opacity:.28;transform:scale(.68)}to{opacity:1;transform:scale(1.1)}}
 @keyframes wobble{25%,75%{transform:translateX(4px)}50%{transform:translateX(-4px)}}
+@keyframes turn{from{clip-path:inset(0 99% 0 0 round 0 18% 18% 0);filter:brightness(1.25)}to{clip-path:inset(0);filter:brightness(1)}}
+@keyframes roll{from{transform:translateX(-65px)}to{transform:translateX(0)}}
+@keyframes greet{35%{transform:translateY(-5px)}70%{transform:translateY(2px)}}
 @media(max-width:740px){
   .shell{width:calc(100% - 24px)}
   .masthead{min-height:62px}
@@ -151,7 +160,8 @@ button.slot:not(:disabled):hover{background:#f0e1bf}
   .window-pattern{display:grid;grid-template-columns:repeat(3,44px);width:max-content}
   .timeline .slot{min-width:44px}
   .feedback-row{align-items:flex-start;flex-wrap:wrap}
-  .ending{min-height:530px;align-items:end;padding:13px}
+  .ending{min-height:530px;align-items:end;padding:208px 13px 13px}
+  .ending-art{height:255px}
   .ending-card{padding:18px 16px 21px}
 }
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}

@@ -49,18 +49,20 @@ const Art = (() => {
 
   function books(x, y, w, h, i) {
     const colors = ['#b96b7b','#547d87','#a18399','#bd855d','#607f78'];
+    const paper = Math.round(w * .68);
+    const rule = Math.round(w * .24);
     return `<g transform="translate(${x} ${y})">
       <path fill="#3d405e" d="M-4 0h${w+9}v${h+3}H-4z"/>
       <path fill="${colors[i % colors.length]}" d="M0 1h${w}v${h-1}H0z"/>
-      <path fill="#e0ba8f" d="M${w*.68} 5h${w*.32}v${h-9}H${w*.68}z"/>
-      <path stroke="#f9d6ac" opacity=".65" d="M6 6v${h-11}m5-${h-11}v${h-11}m${w*.68-6}-${h-14}h${w*.24}m-${w*.24} 4h${w*.24}"/>
+      <path fill="#e0ba8f" d="M${paper} 4h${w-paper}v${h-7}H${paper}z"/>
+      <path stroke="#f9d6ac" opacity=".65" d="M6 4v${h-7}M11 4v${h-7}M${paper+2} 6h${rule}m${-rule} 3h${rule}"/>
     </g>`;
   }
 
   function train(x, y, scale, happy, forward = false) {
     const wheels = [[37,21],[94,21],[170,18],[231,16],[282,14],[327,13]].map(([cx,r]) =>
       `<g transform="translate(${cx} 119)"><circle r="${r}" fill="#23283f" stroke="#efbb78" stroke-width="2.4"/><circle r="${r*.7}" fill="#984f68" stroke="#de9077" stroke-width="1.3"/><path d="M0 ${-r*.65}V${r*.65}M${-r*.65} 0H${r*.65}M${-r*.45} ${-r*.45}l${r*.9} ${r*.9}m${-r*.9} 0 ${r*.9} ${-r*.9}" stroke="#edab79" stroke-width="1.2"/><circle r="4" fill="#ffda9a"/></g>`).join('');
-    return `<g transform="translate(${x} ${y}) scale(${forward ? -scale : scale} ${scale})">
+    return `<g class="locomotive ${happy ? 'train-motion' : ''}"><g transform="translate(${x} ${y}) scale(${forward ? -scale : scale} ${scale})">
       <ellipse cx="171" cy="136" rx="177" ry="9" fill="#152437" opacity=".37"/>
       <g fill="#fff0cb"><circle class="puff" cx="49" cy="-19" r="16"/><circle class="puff" cx="60" cy="-24" r="12"/><circle class="puff" cx="42" cy="-30" r="10"/></g>
       <path stroke="#302942" stroke-width="7" d="M149 106h192"/>
@@ -92,13 +94,13 @@ const Art = (() => {
       <ellipse cx="16" cy="80" rx="3" ry="1.7" fill="#df8d87"/><ellipse cx="44" cy="80" rx="3" ry="1.7" fill="#df8d87"/>
       <path fill="${happy ? '#704354' : 'none'}" stroke="#704354" stroke-width="2" stroke-linecap="round" d="${happy ? 'M23 81q8 5 15-1-6 17-15 1Z' : 'M24 83q6 7 13-1'}"/>
       <path stroke="#ffe9b0" stroke-width="1.5" d="M31 85h5" opacity="${happy ? 1 : 0}"/>
-    </g>`;
+    </g></g>`;
   }
 
-  const bridge = (x, y, i, built) => `<g transform="translate(${x} ${y})" class="${built ? 'reward' : ''}">
+  const bridge = (x, y, i, built) => `<g transform="translate(${x} ${y})"><g class="${built ? 'reward' : ''}">
     <path d="M0 0h112v7h-9v39h-10V29Q56-4 19 29v17H9V7H0Z" fill="${built ? '#b87965' : '#365966'}" stroke="${built ? '#f7cc91' : '#8ca2a5'}" stroke-width="2" ${built ? '' : 'stroke-dasharray="5 6" opacity=".73"'}/>
     ${built ? '<path d="M5 4h103M15 14h83M28 9v6m20-6v6m20-6v6m20-6v6" stroke="#ffd39b" opacity=".67"/>'+star(52, -12, 7) : ''}
-    <text x="56" y="23" text-anchor="middle" font-family="Baloo, sans-serif" font-size="12" fill="#fff1b8">${built ? ['LUA','SAPO','LAMPIÃO'][i] : ''}</text></g>`;
+    <text x="56" y="14" text-anchor="middle" font-family="Baloo, sans-serif" font-size="10" font-weight="800" fill="#fff1b8">${built ? ['LUA','SAPO','LAMPIÃO'][i] : ''}</text></g></g>`;
 
   function scene(world, progress, happy = false) {
     const [sky, horizon, sun, mountain, hill, grass, front, dark] = palette[world];
@@ -118,8 +120,13 @@ const Art = (() => {
       const x = i*75 - 10;
       const count = 3+(i*7)%5;
       const w = 49+(i*13)%24;
-      return Array.from({length: count}, (_,j) => books(x+(j*17)%13, 229-j*15-(i%3)*7, w-(j*11)%14, 14, i+j)).join('') +
-        (i%3 === 0 ? `<path d="M${x+20} ${222-count*15}l13 -21 14 21Z" fill="#f7bc8a"/>` : '');
+      const top = count - 1;
+      const topY = 229-top*15-(i%3)*7;
+      const mid = Math.round(x+(top*17)%13+(w-(top*11)%14)/2);
+      const pile = Array.from({length: count}, (_,j) => books(x+(j*17)%13, 229-j*15-(i%3)*7, w-(j*11)%14, 14, i+j)).join('');
+      const roof = `<path d="M${mid-19} ${topY}l19-22 19 22Z" fill="#a25d77" stroke="#e3aa82" stroke-width="2"/>
+        <path d="M${mid-3} ${topY-4}v-4a3 3 0 0 1 6 0v4Z" fill="#f8c88d"/>`;
+      return pile + (i%3 === 0 ? roof : '');
     }).join('');
     const flora = Array.from({length: 36}, (_,i) => {
       const x = (i*157 + 13)%1210;
@@ -139,7 +146,7 @@ const Art = (() => {
       sprite('lantern', 826, 161, 1.3)+sprite('lantern', 945, 170, .85),
       sprite('gear', 1040, 147, 1.45)+star(1088,151,16)
     ];
-    return `<svg viewBox="0 0 1200 350" preserveAspectRatio="xMidYMid slice" focusable="false">
+    return `<svg viewBox="0 0 1200 350" preserveAspectRatio="${finish ? 'xMaxYMid' : 'xMidYMid'} slice" focusable="false">
       <defs>
         <linearGradient id="sky-${world}" x1="0%" y1="0%" x2="0%" y2="100%" gradientUnits="objectBoundingBox"><stop stop-color="${sky}"/><stop offset="1" stop-color="${horizon}"/></linearGradient>
         <radialGradient id="halo-${world}"><stop stop-color="${sun}" stop-opacity=".7"/><stop offset="1" stop-color="${sun}" stop-opacity="0"/></radialGradient>
@@ -163,7 +170,7 @@ const Art = (() => {
       <path fill="url(#grain-${world})" d="M0 0h1200v350H0Z"/>
       ${!city && forest ? tree(72,347,1.82,'#183b48','#497064')+tree(1166,350,1.75,'#183b48','#497064') : ''}
       ${world > 0 && !finish ? (forest ? forestRewards : cityRewards).slice(0,progress).map(reward => `<g class="reward">${reward}</g>`).join('') : ''}
-      ${train(world === 0 ? 414 + progress*112 : 491 + progress*87, 160, 1, happy, true)}
+      ${train(finish ? 1030 : world === 0 ? 414 + progress*112 : 609 + progress*54, 149, 1, happy, true)}
       ${finish ? Array.from({length: 48}, (_,i) => star((i*121+11)%1190, 36+(i*79)%290, 4+i%8, ['#ffe1a0','#f4a2ad','#a7d3cb'][i%3], 'class="glint sparkle"')).join('') : ''}
     </svg>`;
   }

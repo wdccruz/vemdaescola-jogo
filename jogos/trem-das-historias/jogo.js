@@ -17,20 +17,26 @@ const $ = id => document.getElementById(id);
 const ui = Object.fromEntries([
   'cover','start','adventure','chapter','scenery','chapter-label','station-title','scene-caption','workbench',
   'step-label','challenge-title','instructions','hint','hint-art','board','feedback','next','ending','ending-art',
-  'ending-title','stamps','restart','route','sound','sound-icon','sound-label'
+  'ending-title','stamps','restart','route','sound','sound-icon','sound-label','whistle'
 ].map(id => [id, $(id)]));
 
 const state = { station:0, step:0, selections:[], dials:[0,0], complete:false, sound:false };
 const station = () => stations[state.station];
 const challenge = () => station().challenges[state.step];
 let audio;
+let master;
 
 function play(notes) {
   if (!state.sound) return;
   const AudioEngine = window.AudioContext || window.webkitAudioContext;
   if (!AudioEngine) return;
   try {
-    audio ??= new AudioEngine();
+    if (!audio) {
+      audio = new AudioEngine();
+      master = audio.createGain();
+      master.connect(audio.destination);
+    }
+    master.gain.value = 1;
     if (audio.state === 'suspended') audio.resume().catch(() => {});
     notes.forEach((note, index) => {
       const start = audio.currentTime + index * .105;
@@ -41,7 +47,7 @@ function play(notes) {
       volume.gain.setValueAtTime(.001, start);
       volume.gain.exponentialRampToValueAtTime(.12, start + .018);
       volume.gain.exponentialRampToValueAtTime(.001, start + .28);
-      tone.connect(volume).connect(audio.destination);
+      tone.connect(volume).connect(master);
       tone.start(start);
       tone.stop(start + .3);
     });
@@ -185,7 +191,12 @@ function openChallenge(newStation) {
   renderBoard();
   const heading = newStation ? ui['station-title'] : ui['challenge-title'];
   heading.focus({preventScroll:true});
-  if (newStation) window.scrollTo(0,0);
+  if (newStation) {
+    ui.chapter.classList.remove('turn');
+    void ui.chapter.offsetWidth;
+    ui.chapter.classList.add('turn');
+    window.scrollTo(0,0);
+  }
 }
 
 function begin() {
@@ -277,6 +288,14 @@ ui.board.addEventListener('click', event => {
   }
 });
 ui.hint.addEventListener('click', () => { feedback(challenge().hint); play([494,659]); });
+ui.whistle.addEventListener('click', () => {
+  const train = ui.scenery.querySelector('.locomotive');
+  train.classList.remove('greet');
+  void train.getBoundingClientRect();
+  train.classList.add('greet');
+  if (!state.complete) feedback('Piuí! Brasa mandou um oi.');
+  play([659,784,659]);
+});
 ui.start.addEventListener('click', begin);
 ui.restart.addEventListener('click', begin);
 ui.next.addEventListener('click', () => {
@@ -296,6 +315,7 @@ ui.next.addEventListener('click', () => {
 });
 ui.sound.addEventListener('click', () => {
   state.sound = !state.sound;
+  if (!state.sound && master) master.gain.value = 0;
   renderSound();
   play([494,659]);
 });
