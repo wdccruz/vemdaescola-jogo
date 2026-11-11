@@ -102,6 +102,7 @@ async function campaign(page){
   await page.locator('#start').click();
   await page.locator('#skip').click();
   await land(page,600);
+  assert.match(await page.locator('#guide').textContent(),/Próxima ilha/);
   await shot(page,'02-farol');
   for(let i=0;i<5;i++){
     const portal=await page.evaluate(i=>HUB.portals[i],i);
@@ -113,8 +114,12 @@ async function campaign(page){
     await page.evaluate(()=>SceneArt.load(expedition.world.level.id).decode());
     for(const [step,p] of l.stage.entries()){
       if(i===0&&step===0){
-        await k.walk(185);await k.tap('e');await k.walk(p.fixtures[0].x);await k.tap('e');
+        assert.match(await page.locator('#guide').textContent(),/aperte E para pegá-la/);
+        await k.walk(185);await k.tap('e');
+        assert.match(await page.locator('#guide').textContent(),/Você leva 100/);
+        await k.walk(p.fixtures[0].x);await k.tap('e');
         assert.equal((await state(page)).slots[p.id][0],0);
+        assert.match(await page.locator('#notice').textContent(),/posição das centenas/);
         await k.tap('q');assert.equal((await state(page)).carry.id,0);
         await k.tap('q');assert.equal((await state(page)).carry,null);
         await shot(page,'03-oficina');
@@ -122,6 +127,7 @@ async function campaign(page){
       if(p.kind==='slots')await solveSlots(page,k,p,plans[i][step]);
       else await solveBins(page,k,p,plans[i][step]);
       await wait(page,step=>expedition.world.state.solved[step],step);
+      if(i===0&&step===0)assert.match(await page.locator('#guide').textContent(),/O portão abriu/);
       if(step===1){
         await k.walk(1765);
         await wait(page,()=>expedition.world.state.checkpoint>=1750);

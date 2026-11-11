@@ -501,6 +501,13 @@ const SceneArt=(()=>{
       star(g,x,y-62,12+Math.sin(t*2)*2,gold);
       text(g,'Lente',x,y-16,15);
     }
+    const waypoint=w.waypoint;
+    if(waypoint&&seen(waypoint.x,waypoint.y,c)){
+      const {x,y,label}=waypoint,width=label.length*8+23;
+      rect(g,x-width/2,y-23,width,25,7,'#1b3743f7',gold,1.55);
+      text(g,label,x,y-11,15);
+      g.save();g.translate(x,y+2);shape(g,'M-6 0H6L0 8Z',gold);g.restore();
+    }
     tuca(g,w.pet,t,reduced);
     const p=w.player;
     mila(g,p,t,w.cheer>0,Boolean(w.carry),w.climbing);
